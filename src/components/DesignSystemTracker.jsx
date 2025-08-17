@@ -338,6 +338,108 @@ const DesignSystemTracker = () => {
   // Get authentication context
   const { user: currentUser, logout: handleLogout } = useMagicLinkAuth();
 
+  // Local storage keys
+  const STORAGE_KEYS = {
+    TASKS: 'design_tracker_tasks',
+    CELL_DATA: 'design_tracker_cell_data',
+    COLLAPSED: 'design_tracker_collapsed',
+    CHANGE_LOG: 'design_tracker_change_log'
+  };
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    try {
+      // Load tasks
+      const savedTasks = localStorage.getItem(STORAGE_KEYS.TASKS);
+      if (savedTasks) {
+        const parsedTasks = JSON.parse(savedTasks);
+        setTasks(parsedTasks);
+      }
+
+      // Load cell data (assignments)
+      const savedCellData = localStorage.getItem(STORAGE_KEYS.CELL_DATA);
+      if (savedCellData) {
+        const parsedCellData = JSON.parse(savedCellData);
+        setCellData(parsedCellData);
+      }
+
+      // Load collapsed state
+      const savedCollapsed = localStorage.getItem(STORAGE_KEYS.COLLAPSED);
+      if (savedCollapsed) {
+        const parsedCollapsed = JSON.parse(savedCollapsed);
+        setCollapsed(parsedCollapsed);
+      }
+
+      // Load change log
+      const savedChangeLog = localStorage.getItem(STORAGE_KEYS.CHANGE_LOG);
+      if (savedChangeLog) {
+        const parsedChangeLog = JSON.parse(savedChangeLog);
+        setChangeLog(parsedChangeLog);
+      }
+    } catch (error) {
+      console.error('Error loading data from localStorage:', error);
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+    } catch (error) {
+      console.error('Error saving tasks to localStorage:', error);
+    }
+  }, [tasks]);
+
+  // Save cell data to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.CELL_DATA, JSON.stringify(cellData));
+    } catch (error) {
+      console.error('Error saving cell data to localStorage:', error);
+    }
+  }, [cellData]);
+
+  // Save collapsed state to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.COLLAPSED, JSON.stringify(collapsed));
+    } catch (error) {
+      console.error('Error saving collapsed state to localStorage:', error);
+    }
+  }, [collapsed]);
+
+  // Save change log to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.CHANGE_LOG, JSON.stringify(changeLog));
+    } catch (error) {
+      console.error('Error saving change log to localStorage:', error);
+    }
+  }, [changeLog]);
+
+  // Function to clear all stored data and reset to initial state
+  const clearAllData = () => {
+    try {
+      // Clear localStorage
+      localStorage.removeItem(STORAGE_KEYS.TASKS);
+      localStorage.removeItem(STORAGE_KEYS.CELL_DATA);
+      localStorage.removeItem(STORAGE_KEYS.COLLAPSED);
+      localStorage.removeItem(STORAGE_KEYS.CHANGE_LOG);
+      
+      // Reset state to initial values
+      setTasks(initialTasks);
+      setCellData({});
+      setCollapsed({});
+      setChangeLog([]);
+      setSelectedCells(new Set());
+      setLastClickedCell(null);
+      
+      console.log('All data cleared and reset to initial state');
+    } catch (error) {
+      console.error('Error clearing data:', error);
+    }
+  };
+
   const categories = ["Design Roadmap", "Audit", "Maintenance", "Advocacy & Training"];
   const statusOptions = [
     { value: "planned", label: "Planned", icon: Circle },
@@ -397,11 +499,32 @@ const DesignSystemTracker = () => {
   };
 
   const handleLocalLogout = () => {
+    // Clear only current user's personal data while keeping project data
     if (currentUser) {
-      logChange('logout', `User ${currentUser.name} logged out`);
+      try {
+        // Clear current user's assignments from cellData
+        const updatedCellData = { ...cellData };
+        Object.keys(updatedCellData).forEach(key => {
+          if (updatedCellData[key].assignee === currentUser.name) {
+            updatedCellData[key].assignee = '';
+          }
+        });
+        setCellData(updatedCellData);
+        
+        // Log the logout
+        logChange('logout', `User ${currentUser.name} logged out`);
+        
+        // Clear user's personal selections
+        setSelectedCells(new Set());
+        setLastClickedCell(null);
+        
+        console.log('User data cleared on logout');
+      } catch (error) {
+        console.error('Error clearing user data on logout:', error);
+      }
     }
-    setSelectedCells(new Set());
-    setContextMenu(null);
+    
+    // Call the actual logout function from context
     handleLogout();
   };
 
@@ -894,6 +1017,18 @@ const DesignSystemTracker = () => {
                 >
                   <History className="w-4 h-4" />
                   <span>Change Log</span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to clear all data? This will reset all tasks, assignments, and settings to their initial state. This action cannot be undone.')) {
+                      clearAllData();
+                    }
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  title="Clear all data and reset to initial state"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Clear All Data</span>
                 </button>
                 <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-lg">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
