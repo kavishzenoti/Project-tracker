@@ -2,7 +2,262 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Calendar, Users, CheckCircle2, Circle, Clock, AlertCircle, PauseCircle, Edit3, X, Trash2, Check, User, LogOut, History, Filter } from 'lucide-react';
 import { useMagicLinkAuth } from '../contexts/MagicLinkAuthContext.jsx';
 
+// Style Tokens: central place to manage colors and sizing
+const STYLE_TOKENS = {
+  spacing: {
+    categoryGap: 'mb-6', // 24px gap
+  },
+  sizes: {
+    weekCell: 'w-16 min-w-16', // 64px min width
+    taskCol: 'min-w-0 w-96',
+  },
+  status: {
+    planned: 'bg-purple-500 border-purple-600',
+    'in-progress': 'bg-blue-500 border-blue-600',
+    completed: 'bg-green-500 border-green-600',
+    blocked: 'bg-red-500 border-red-600',
+    delayed: 'bg-orange-500 border-orange-600',
+    default: 'bg-gray-400 border-gray-500',
+  },
+  priorityBorder: {
+    high: 'border-l-red-500',
+    medium: 'border-l-yellow-500',
+    low: 'border-l-green-500',
+    default: 'border-l-gray-300',
+  },
+  container: 'border border-gray-200 rounded-lg bg-white',
+};
+
+// Change Log Modal Component - moved completely outside to prevent re-renders
+const ChangeLogModal = ({ 
+  changeLog, 
+  userFilter, 
+  actionFilter, 
+  setUserFilter, 
+  setActionFilter, 
+  teamMembers, 
+  onClose 
+}) => {
+  const filteredLogs = changeLog.filter(log => {
+    if (userFilter !== 'all' && log.user !== userFilter) return false;
+    if (actionFilter !== 'all' && log.action !== actionFilter) return false;
+    return true;
+  });
+
+  const formatTimestamp = (timestamp) => {
+    return new Date(timestamp).toLocaleString();
+  };
+
+  const getActionIcon = (action) => {
+    switch (action) {
+      case 'login': return <User className="w-4 h-4 text-blue-600" />;
+      case 'logout': return <LogOut className="w-4 h-4 text-gray-600" />;
+      case 'task_created': return <Edit3 className="w-4 h-4 text-green-600" />;
+      case 'task_edited': return <Edit3 className="w-4 h-4 text-blue-600" />;
+      case 'task_deleted': return <Trash2 className="w-4 h-4 text-red-600" />;
+      case 'task_reordered': return <History className="w-4 h-4 text-purple-600" />;
+      case 'assignment': return <Users className="w-4 h-4 text-purple-600" />;
+      case 'status_change': return <CheckCircle2 className="w-4 h-4 text-orange-600" />;
+      default: return <Circle className="w-4 h-4 text-gray-600" />;
+    }
+  };
+
+  const handleClose = () => {
+    console.log('Closing change log modal');
+    onClose();
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      console.log('Closing modal via backdrop click');
+      e.preventDefault();
+      e.stopPropagation();
+      handleClose();
+    }
+  };
+
+  // Handle escape key
+  React.useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        console.log('Closing modal via escape key');
+        e.preventDefault();
+        handleClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
+  console.log('ChangeLogModal render - should only see this once per open');
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-white rounded-lg p-6 max-w-4xl mx-4 shadow-xl max-h-[80vh] overflow-hidden">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Change Log</h2>
+          <button
+            onClick={(e) => {
+              console.log('Close button clicked!');
+              e.preventDefault();
+              e.stopPropagation();
+              handleClose();
+            }}
+            className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+            title="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        {/* Filters */}
+        <div className="flex gap-4 mb-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-gray-500" />
+            <select
+              value={userFilter}
+              onChange={(e) => setUserFilter(e.target.value)}
+              className="text-sm border border-gray-300 rounded px-2 py-1"
+            >
+              <option value="all">All Users</option>
+              {teamMembers.map(member => (
+                <option key={member.id} value={member.name}>{member.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-gray-500" />
+            <select
+              value={actionFilter}
+              onChange={(e) => setActionFilter(e.target.value)}
+              className="text-sm border border-gray-300 rounded px-2 py-1"
+            >
+              <option value="all">All Actions</option>
+              <option value="login">Login</option>
+              <option value="logout">Logout</option>
+              <option value="task_created">Task Created</option>
+              <option value="task_edited">Task Edited</option>
+              <option value="task_deleted">Task Deleted</option>
+              <option value="task_reordered">Task Reordered</option>
+              <option value="assignment">Assignment</option>
+              <option value="status_change">Status Change</option>
+            </select>
+          </div>
+        </div>
+        
+        {/* Log Entries */}
+        <div className="overflow-y-auto max-h-[60vh]">
+          {filteredLogs.length === 0 ? (
+            <div className="text-center text-gray-500 py-8">No changes found</div>
+          ) : (
+            <div className="space-y-3">
+              {filteredLogs.map(log => (
+                <div key={log.id} className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                  <div className="mt-1">
+                    {getActionIcon(log.action)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-medium text-gray-900">{log.user}</span>
+                      <span className="text-sm text-gray-500">{formatTimestamp(log.timestamp)}</span>
+                    </div>
+                    <div className="text-sm text-gray-700">{log.details}</div>
+                    {log.taskName && (
+                      <div className="text-xs text-gray-500 mt-1">
+                        Task: {log.taskName}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DesignSystemTracker = () => {
+  // Add custom styles for responsive behavior
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .responsive-task-input {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
+      }
+      
+      .responsive-task-input .input-container {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        max-width: calc(100% - 80px); /* Reserve space for button */
+        width: var(--add-input-width, 100%);
+        flex-basis: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      
+      .responsive-task-input input {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+      }
+      
+      .responsive-task-input button {
+        flex-shrink: 0;
+        white-space: nowrap;
+        min-width: 60px;
+      }
+      
+      @media (max-width: 640px) {
+        .responsive-task-input {
+          gap: 0.25rem;
+        }
+        
+        .responsive-task-input button {
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+        
+        .responsive-task-input .input-container {
+          max-width: calc(100% - 70px);
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .responsive-task-input .input-container {
+          max-width: calc(100% - 60px);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  // Dynamically size the add-input width based on viewport to decouple from table width
+  useEffect(() => {
+    const updateAddInputWidth = () => {
+      const widthPx = Math.max(140, window.innerWidth - 220); // reserve space for button/margins
+      document.documentElement.style.setProperty('--add-input-width', `${widthPx}px`);
+    };
+    updateAddInputWidth();
+    window.addEventListener('resize', updateAddInputWidth);
+    return () => window.removeEventListener('resize', updateAddInputWidth);
+  }, []);
+
   // Generate weeks starting from current week
   const generateWeeks = () => {
     const weeks = [];
@@ -59,7 +314,18 @@ const DesignSystemTracker = () => {
   const [editingTaskName, setEditingTaskName] = useState('');
   const [newTaskInputs, setNewTaskInputs] = useState({});
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
-  const [showInstructions, setShowInstructions] = useState(true);
+  const [showInstructions, setShowInstructions] = useState(false);
+  
+  // Category collapsed state
+  const [collapsed, setCollapsed] = useState({});
+  
+  // Filter state
+  const [showOnlyMyTasks, setShowOnlyMyTasks] = useState(false);
+  
+  // Drag and drop state for reordering
+  const [draggedTask, setDraggedTask] = useState(null);
+  const [dragOverTask, setDragOverTask] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   
   // User management and logging
   const [changeLog, setChangeLog] = useState([]);
@@ -125,8 +391,8 @@ const DesignSystemTracker = () => {
 
   // User authentication
   const handleLogin = (user) => {
-    setCurrentUser(user);
-    setShowLogin(false);
+    // setCurrentUser(user); // This line was removed as per the new_code
+    // setShowLogin(false); // This line was removed as per the new_code
     logChange('login', `User ${user.name} logged in`);
   };
 
@@ -190,23 +456,11 @@ const DesignSystemTracker = () => {
   };
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case "completed": return "bg-green-500 border-green-600";
-      case "in-progress": return "bg-blue-500 border-blue-600";
-      case "blocked": return "bg-red-500 border-red-600";
-      case "delayed": return "bg-orange-500 border-orange-600";
-      case "planned": return "bg-purple-500 border-purple-600";
-      default: return "bg-gray-400 border-gray-500";
-    }
+    return STYLE_TOKENS.status[status] || STYLE_TOKENS.status.default;
   };
 
   const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "high": return "border-l-red-500";
-      case "medium": return "border-l-yellow-500";
-      case "low": return "border-l-green-500";
-      default: return "border-l-gray-300";
-    }
+    return STYLE_TOKENS.priorityBorder[priority] || STYLE_TOKENS.priorityBorder.default;
   };
 
   const updateTaskPriority = (taskId, priority) => {
@@ -393,6 +647,23 @@ const DesignSystemTracker = () => {
     return weeks.filter(week => isCellScheduled(taskId, week.id));
   };
 
+  // Filter tasks to show only current user's assignments
+  const getFilteredTasks = (category) => {
+    if (!showOnlyMyTasks || !currentUser) {
+      return tasks.filter(task => task.category === category);
+    }
+    
+    return tasks.filter(task => {
+      if (task.category !== category) return false;
+      
+      // Check if user has any assignments for this task
+      return weeks.some(week => {
+        const cellInfo = getCellData(task.id, week.id);
+        return cellInfo.assignee === currentUser.name;
+      });
+    });
+  };
+  
   const getPreviewRangeCells = () => {
     if (!isShiftPressed || !hoveredCell || !lastClickedCell) {
       return new Set();
@@ -449,6 +720,75 @@ const DesignSystemTracker = () => {
   const cancelEditingTask = () => {
     setEditingTask(null);
     setEditingTaskName('');
+  };
+
+  // Drag and drop handlers for reordering
+  const handleDragStart = (e, task) => {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify({ taskId: task.id, category: task.category }));
+    setDraggedTask(task);
+    setIsDragging(true);
+    
+    // Add visual feedback
+    e.target.style.opacity = '0.5';
+    e.target.style.transform = 'rotate(1deg)';
+  };
+
+  const handleDragEnd = (e) => {
+    setDraggedTask(null);
+    setDragOverTask(null);
+    setIsDragging(false);
+    
+    // Remove visual feedback
+    e.target.style.opacity = '1';
+    e.target.style.transform = 'none';
+  };
+
+  const handleDragOver = (e, task) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    
+    if (draggedTask && draggedTask.id !== task.id && draggedTask.category === task.category) {
+      setDragOverTask(task);
+    }
+  };
+
+  const handleDragLeave = (e) => {
+    // Only reset if we're leaving the task row entirely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverTask(null);
+    }
+  };
+
+  const handleDrop = (e, targetTask) => {
+    e.preventDefault();
+    
+    if (!draggedTask || draggedTask.id === targetTask.id || draggedTask.category !== targetTask.category) {
+      return;
+    }
+
+    // Reorder tasks within the category
+    setTasks(prevTasks => {
+      const categoryTasks = prevTasks.filter(t => t.category === draggedTask.category);
+      const draggedIndex = categoryTasks.findIndex(t => t.id === draggedTask.id);
+      const targetIndex = categoryTasks.findIndex(t => t.id === targetTask.id);
+      
+      if (draggedIndex === -1 || targetIndex === -1) return prevTasks;
+      
+      // Create new array with reordered tasks
+      const newTasks = [...prevTasks];
+      const [draggedTaskItem] = newTasks.splice(draggedIndex, 1);
+      
+      // Insert at target position
+      newTasks.splice(targetIndex, 0, draggedTaskItem);
+      
+      // Log the reordering
+      logChange('task_reordered', `Task "${draggedTask.name}" reordered within ${draggedTask.category}`, draggedTask.id);
+      
+      return newTasks;
+    });
+    
+    setDragOverTask(null);
   };
 
   // Context Menu Component
@@ -540,111 +880,6 @@ const DesignSystemTracker = () => {
 
 
 
-  // Change Log Modal Component
-  const ChangeLogModal = () => {
-    const filteredLogs = changeLog.filter(log => {
-      if (userFilter !== 'all' && log.user !== userFilter) return false;
-      if (actionFilter !== 'all' && log.action !== actionFilter) return false;
-      return true;
-    });
-
-    const formatTimestamp = (timestamp) => {
-      return new Date(timestamp).toLocaleString();
-    };
-
-    const getActionIcon = (action) => {
-      switch (action) {
-        case 'login': return <User className="w-4 h-4 text-blue-600" />;
-        case 'logout': return <LogOut className="w-4 h-4 text-gray-600" />;
-        case 'task_created': return <Edit3 className="w-4 h-4 text-green-600" />;
-        case 'task_edited': return <Edit3 className="w-4 h-4 text-blue-600" />;
-        case 'task_deleted': return <Trash2 className="w-4 h-4 text-red-600" />;
-        case 'assignment': return <Users className="w-4 h-4 text-purple-600" />;
-        case 'status_change': return <CheckCircle2 className="w-4 h-4 text-orange-600" />;
-        default: return <Circle className="w-4 h-4 text-gray-600" />;
-      }
-    };
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 max-w-4xl mx-4 shadow-xl max-h-[80vh] overflow-hidden">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Change Log</h2>
-            <button
-              onClick={() => setShowChangeLog(false)}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          
-          {/* Filters */}
-          <div className="flex gap-4 mb-4">
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-500" />
-              <select
-                value={userFilter}
-                onChange={(e) => setUserFilter(e.target.value)}
-                className="text-sm border border-gray-300 rounded px-2 py-1"
-              >
-                <option value="all">All Users</option>
-                {teamMembers.map(member => (
-                  <option key={member.id} value={member.name}>{member.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-500" />
-              <select
-                value={actionFilter}
-                onChange={(e) => setActionFilter(e.target.value)}
-                className="text-sm border border-gray-300 rounded px-2 py-1"
-              >
-                <option value="all">All Actions</option>
-                <option value="login">Login</option>
-                <option value="logout">Logout</option>
-                <option value="task_created">Task Created</option>
-                <option value="task_edited">Task Edited</option>
-                <option value="task_deleted">Task Deleted</option>
-                <option value="assignment">Assignment</option>
-                <option value="status_change">Status Change</option>
-              </select>
-            </div>
-          </div>
-          
-          {/* Log Entries */}
-          <div className="overflow-y-auto max-h-[60vh]">
-            {filteredLogs.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">No changes found</div>
-            ) : (
-              <div className="space-y-3">
-                {filteredLogs.map(log => (
-                  <div key={log.id} className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                    <div className="mt-1">
-                      {getActionIcon(log.action)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-gray-900">{log.user}</span>
-                        <span className="text-sm text-gray-500">{formatTimestamp(log.timestamp)}</span>
-                      </div>
-                      <div className="text-sm text-gray-700">{log.details}</div>
-                      {log.taskName && (
-                        <div className="text-xs text-gray-500 mt-1">
-                          Task: {log.taskName}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-full mx-auto">
@@ -704,6 +939,21 @@ const DesignSystemTracker = () => {
               <Users className="w-4 h-4" />
               <span>{teamMembers.length} Team Members</span>
             </div>
+            {currentUser && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowOnlyMyTasks(!showOnlyMyTasks)}
+                  className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                    showOnlyMyTasks 
+                      ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+                  }`}
+                  title={showOnlyMyTasks ? "Show all tasks" : "Show only my tasks"}
+                >
+                  {showOnlyMyTasks ? "My Tasks" : "All Tasks"}
+                </button>
+              </div>
+            )}
             {selectedCells.size > 0 && (
               <div className="flex items-center gap-2 text-blue-600 font-medium">
                 <span>{selectedCells.size} cell(s) selected</span>
@@ -783,6 +1033,7 @@ const DesignSystemTracker = () => {
                     <div>• <strong>Right-click:</strong> Context menu for assignments</div>
                     <div>• <strong>Click outside or Escape:</strong> Clear selection</div>
                     <div>• <strong>Change Log:</strong> Track all user actions and changes</div>
+                    <div>• <strong>Drag and Drop:</strong> Reorder tasks within categories</div>
                   </div>
                 </div>
                 <div className="border-t border-gray-200 pt-3 mt-3">
@@ -799,14 +1050,25 @@ const DesignSystemTracker = () => {
         </div>
 
         {/* Main Tracker Table */}
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <div className="rounded-lg overflow-hidden">
+          {/* Drag and Drop Indicator */}
+          {isDragging && (
+            <div className="bg-blue-50 border-b border-blue-200 p-2 text-center text-sm text-blue-700">
+              <span className="flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
+                </svg>
+                Drag to reorder tasks within the same category
+              </span>
+            </div>
+          )}
+          <div className="overflow-x-auto min-w-0">
+            <table className="w-full min-w-0 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-gray-700 min-w-96">Task</th>
+                  <th className={`text-left p-4 font-semibold text-gray-700 ${STYLE_TOKENS.sizes.taskCol}`}>Task</th>
                   {weeks.map(week => (
-                    <th key={week.id} className="text-center p-2 font-semibold text-gray-700 min-w-20">
+                    <th key={week.id} className={`text-center p-2 font-semibold text-gray-700 ${STYLE_TOKENS.sizes.weekCell}`}>
                       <div className="text-sm">{week.label}</div>
                       <div className="text-xs text-gray-500">{week.startDate}</div>
                     </th>
@@ -814,51 +1076,87 @@ const DesignSystemTracker = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories.map(category => (
+                {categories.map((category, idx) => (
                   <React.Fragment key={category}>
-                    <tr className="bg-gray-100">
-                      <td colSpan={weeks.length + 1} className="p-3 font-semibold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-50">
-                        <span className="flex-1 min-w-0">{category}</span>
-                      </td>
-                    </tr>
-                    
-                    {/* Add task input row */}
-                    <tr className="bg-gray-50">
-                      <td colSpan={weeks.length + 1} className="p-2">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            placeholder={`Add new task in ${category}...`}
-                            className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-0"
-                            value={newTaskInputs[category] || ""}
-                            onChange={(e) => handleNewTaskInputChange(category, e.target.value)}
-                            onKeyPress={(e) => handleNewTaskKeyPress(category, e)}
-                          />
+                    {idx > 0 && (
+                      <tr>
+                        <td colSpan={weeks.length + 1}>
+                          <div className="h-6"></div>
+                        </td>
+                      </tr>
+                    )}
+                    {/* Category container */}
+                    <tr>
+                      <td colSpan={weeks.length + 1}>
+                        <div className={`${STYLE_TOKENS.container} px-2 pt-2 pb-0`}>
+                          {/* Header (no gray bg) */}
                           <button
-                            onClick={() => addNewTask(category)}
-                            className="px-3 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors flex-shrink-0"
-                            disabled={!newTaskInputs[category]?.trim()}
+                            type="button"
+                            className="flex items-center justify-between w-full py-2 px-2 hover:bg-gray-50 rounded-md"
+                            onClick={() => setCollapsed(prev => ({ ...prev, [category]: !prev[category] }))}
                           >
-                            <span>Add</span>
+                            <h2 className="text-lg font-semibold text-gray-900">{category}</h2>
+                            <div className={`w-5 h-5 transition-transform ${collapsed[category] ? '' : 'rotate-180'}`}>
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
                           </button>
+
+                          {/* Add task input row */}
+                          <div className="px-2 pt-2 pb-0 mb-2">
+                            <div className="responsive-task-input sticky left-0 z-10 bg-white pr-2">
+                              <div className="input-container">
+                                <input
+                                  type="text"
+                                  placeholder={`Add new task in ${category}...`}
+                                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  value={newTaskInputs[category] || ""}
+                                  onChange={(e) => handleNewTaskInputChange(category, e.target.value)}
+                                  onKeyPress={(e) => handleNewTaskKeyPress(category, e)}
+                                />
+                              </div>
+                              <button
+                                onClick={() => addNewTask(category)}
+                                className="px-3 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors min-w-[72px]"
+                                disabled={!newTaskInputs[category]?.trim()}
+                              >
+                                <span>Add</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Rows */}
+                          {/* Rows are rendered directly in the main table body to keep columns aligned */}
+                          
                         </div>
                       </td>
                     </tr>
-
-                    {tasks.filter(task => task.category === category).map(task => {
+                    {!collapsed[category] && getFilteredTasks(category).map(task => {
                       const scheduledWeeks = getTaskScheduledWeeks(task.id);
-                      
                       return (
                         <tr 
                           key={task.id} 
-                          className="border-b border-gray-100 hover:bg-gray-50 transition-all group"
+                          className={`hover:bg-gray-50 transition-all duration-200 group ${
+                            draggedTask?.id === task.id ? 'opacity-50 scale-95 shadow-lg' : ''
+                          } ${
+                            dragOverTask?.id === task.id ? 'border-t-2 border-t-blue-400 bg-blue-50 shadow-md' : ''
+                          } ${
+                            isDragging && draggedTask?.id !== task.id && draggedTask?.category === task.category ? 'cursor-pointer' : ''
+                          }`}
+                          draggable={currentUser?.email && currentUser.email.endsWith('@zenoti.com')}
+                          onDragStart={(e) => handleDragStart(e, task)}
+                          onDragEnd={handleDragEnd}
+                          onDragOver={(e) => handleDragOver(e, task)}
+                          onDragLeave={handleDragLeave}
+                          onDrop={(e) => handleDrop(e, task)}
                         >
-                          <td className={`p-4 border-l-4 ${getPriorityColor(task.priority)}`}>
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
+                          <td className={`bg-white p-4 border-l-4 ${getPriorityColor(task.priority)} min-w-0`}>
+                            <div className="flex items-start justify-between min-w-0">
+                              <div className="flex-1 min-w-0 overflow-hidden">
+                                <div className="flex items-center gap-2 mb-1 min-w-0">
                                   {editingTask === task.id ? (
-                                    <div className="flex items-center gap-2 flex-1">
+                                    <div className="flex items-center gap-2 flex-1 min-w-0">
                                       <input
                                         type="text"
                                         value={editingTaskName}
@@ -870,12 +1168,12 @@ const DesignSystemTracker = () => {
                                             cancelEditingTask();
                                           }
                                         }}
-                                        className="flex-1 px-2 py-1 text-sm border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="flex-1 px-2 py-1 text-sm border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0"
                                         autoFocus
                                       />
                                       <button
                                         type="button"
-                                        className="p-1 text-green-600 hover:text-green-800 bg-white border rounded"
+                                        className="p-1 text-green-600 hover:text-green-800 bg-white border rounded flex-shrink-0"
                                         title="Save changes"
                                         onMouseDown={saveEditingTask}
                                       >
@@ -883,7 +1181,7 @@ const DesignSystemTracker = () => {
                                       </button>
                                       <button
                                         type="button"
-                                        className="p-1 text-red-600 hover:text-red-800 bg-white border rounded"
+                                        className="p-1 text-red-600 hover:text-red-800 bg-white border rounded flex-shrink-0"
                                         title="Cancel editing"
                                         onMouseDown={cancelEditingTask}
                                       >
@@ -891,8 +1189,15 @@ const DesignSystemTracker = () => {
                                       </button>
                                     </div>
                                   ) : (
-                                    <div className="flex items-center gap-2 flex-1">
-                                      <div className="font-medium text-gray-900 text-sm flex-1">
+                                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                                      {currentUser?.email && currentUser.email.endsWith('@zenoti.com') && (
+                                        <div className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing flex-shrink-0">
+                                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
+                                          </svg>
+                                        </div>
+                                      )}
+                                      <div className="font-medium text-gray-900 text-sm flex-1 min-w-0 truncate" title={task.name} aria-label={task.name}>
                                         {task.name}
                                       </div>
                                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -965,7 +1270,6 @@ const DesignSystemTracker = () => {
                               </div>
                             </div>
                           </td>
-                          
                           {weeks.map(week => {
                             const cellInfo = getCellData(task.id, week.id);
                             const isScheduled = isCellScheduled(task.id, week.id);
@@ -975,7 +1279,7 @@ const DesignSystemTracker = () => {
                             
                             if (isScheduled) {
                               return (
-                                <td key={week.id} className="p-1">
+                                <td key={week.id} className={`bg-white border-r border-gray-200 p-1 ${STYLE_TOKENS.sizes.weekCell}`}>
                                   <div 
                                     className={`h-8 border ${getStatusColor(cellInfo.status)} rounded-sm flex items-center justify-center relative cursor-pointer transition-all hover:opacity-80 ${
                                       isSelected ? 'ring-2 ring-blue-400 ring-offset-1' : ''
@@ -1002,7 +1306,7 @@ const DesignSystemTracker = () => {
                               );
                             } else {
                               return (
-                                <td key={week.id} className="p-1">
+                                <td key={week.id} className={`bg-white border-r border-gray-200 p-1 ${STYLE_TOKENS.sizes.weekCell}`}>
                                   <div 
                                     className={`h-8 bg-gray-50 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors ${
                                       isSelected ? 'ring-2 ring-blue-400 ring-offset-1 bg-blue-50' : ''
@@ -1144,7 +1448,22 @@ const DesignSystemTracker = () => {
 
 
         {/* Change Log Modal */}
-        {showChangeLog && <ChangeLogModal />}
+        {showChangeLog && (
+          <ChangeLogModal 
+            changeLog={changeLog} 
+            userFilter={userFilter} 
+            actionFilter={actionFilter} 
+            setUserFilter={setUserFilter} 
+            setActionFilter={setActionFilter} 
+            teamMembers={teamMembers} 
+            onClose={() => {
+              console.log('onClose called, setting showChangeLog to false');
+              console.log('Current showChangeLog state:', showChangeLog);
+              setShowChangeLog(false);
+              console.log('showChangeLog should now be false');
+            }}
+          />
+        )}
       </div>
     </div>
   );
