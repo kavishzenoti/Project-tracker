@@ -1,0 +1,211 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { 
+  generateMagicToken, 
+  createMagicLink, 
+  sendMagicLinkEmail,
+  storeMagicLinkData,
+  getMagicLinkData,
+  clearMagicLinkData,
+  isMagicLinkAuthenticated,
+  getMagicLinkUser,
+  validateMagicToken
+} from '../utils/magicLink.js';
+
+// Create authentication context
+const MagicLinkAuthContext = createContext();
+
+// Custom hook to use authentication context
+export const useMagicLinkAuth = () => {
+  const context = useContext(MagicLinkAuthContext);
+  if (!context) {
+    throw new Error('useMagicLinkAuth must be used within a MagicLinkAuthProvider');
+  }
+  return context;
+};
+
+// Authentication provider component
+export const MagicLinkAuthProvider = ({ children }) => {
+  const [authState, setAuthState] = useState('loading');
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [isSendingLink, setIsSendingLink] = useState(false);
+
+  // Initialize authentication state on component mount
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // Check if user is already authenticated via magic link
+        if (isMagicLinkAuthenticated()) {
+          const currentUser = getMagicLinkUser();
+          if (currentUser) {
+            setUser(currentUser);
+            setAuthState('authenticated');
+          } else {
+            // Clear invalid data
+            clearMagicLinkData();
+            setAuthState('unauthenticated');
+          }
+        } else {
+          setAuthState('unauthenticated');
+        }
+      } catch (error) {
+        console.error('Authentication initialization error:', error);
+        setError(error.message);
+        setAuthState('error');
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  // Send magic link to user's email
+  const sendMagicLink = useCallback(async (email) => {
+    try {
+      setIsSendingLink(true);
+      setError(null);
+
+      // Validate email format
+      if (!email || !email.includes('@')) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      // Generate secure token
+      const token = generateMagicToken();
+      
+      // Create magic link
+      const baseUrl = window.location.origin;
+      const magicLink = createMagicLink(email, token, baseUrl);
+      
+      // Store magic link data locally
+      const stored = storeMagicLinkData(email, token);
+      if (!stored) {
+        throw new Error('Failed to generate magic link. Please try again.');
+      }
+
+      // Send magic link (simulated for demo)
+      const result = await sendMagicLinkEmail(email, magicLink);
+      
+      if (result.success) {
+        setAuthState('link-sent');
+        return { success: true, message: result.message };
+      } else {
+        throw new Error(result.message || 'Failed to send magic link');
+      }
+    } catch (error) {
+      console.error('Send magic link error:', error);
+      setError(error.message);
+      throw error;
+    } finally {
+      setIsSendingLink(false);
+    }
+  }, []);
+
+  // Verify magic link token
+  const verifyMagicLink = useCallback(async (email, token) => {
+    try {
+      setAuthState('loading');
+      setError(null);
+
+      // Get stored magic link data
+      const storedData = getMagicLinkData();
+      
+      if (!storedData) {
+        throw new Error('Magic link expired or invalid. Please request a new one.');
+      }
+
+      // Validate token
+      const isValid = validateMagicToken(token, storedData.token, storedData.expirationTime);
+      
+      if (!isValid) {
+        throw new Error('Invalid or expired magic link. Please request a new one.');
+      }
+
+      // Check if email matches
+      if (storedData.email !== email) {
+        throw new Error('Email mismatch. Please use the link sent to your email.');
+      }
+
+      // Get user information
+      const userInfo = getMagicLinkUser();
+      
+      // Update state
+      setUser(userInfo);
+      setAuthState('authenticated');
+      
+      // Clear magic link data after successful verification
+      clearMagicLinkData();
+      
+      return userInfo;
+    } catch (error) {
+      console.error('Magic link verification error:', error);
+      setError(error.message);
+      setAuthState('error');
+      throw error;
+    }
+  }, []);
+
+  // Logout user
+  const logout = useCallback(() => {
+    try {
+      // Clear stored authentication data
+      clearMagicLinkData();
+      
+      // Reset state
+      setUser(null);
+      setError(null);
+      setAuthState('unauthenticated');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }, []);
+
+  // Check if user has specific role or permission
+  const hasRole = useCallback((role) => {
+    if (!user) return false;
+    // Check if the user is an admin based on email domain
+    return user.email && user.email.endsWith('@zenoti.com');
+  }, [user]);
+
+  // Check if user has specific permission
+  const hasPermission = useCallback((permission) => {
+    if (!user) return false;
+    // All authenticated users have basic permissions
+    return true;
+  }, [user]);
+
+  // Context value
+  const value = {
+    // State
+    authState,
+    user,
+    error,
+    isInitializing,
+    isAuthenticated: authState === 'authenticated',
+    isSendingLink,
+    
+    // Methods
+    sendMagicLink,
+    verifyMagicLink,
+    logout,
+    hasRole,
+    hasPermission,
+    
+    // Constants
+    AUTH_STATES: {
+      LOADING: 'loading',
+      UNAUTHENTICATED: 'unauthenticated',
+      LINK_SENT: 'link-sent',
+      AUTHENTICATED: 'authenticated',
+      ERROR: 'error'
+    }
+  };
+
+  return (
+    <MagicLinkAuthContext.Provider value={value}>
+      {children}
+    </MagicLinkAuthContext.Provider>
+  );
+};
