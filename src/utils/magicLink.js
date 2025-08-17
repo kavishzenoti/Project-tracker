@@ -19,7 +19,11 @@ export const generateMagicToken = () => {
 
 // Create a magic link URL
 export const createMagicLink = (email, token, baseUrl) => {
-  const url = new URL('/auth/verify', baseUrl);
+  // Detect if we're on GitHub Pages
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  const basePath = isGitHubPages ? '/Project-tracker' : '';
+  
+  const url = new URL(basePath + '/auth/verify', baseUrl);
   url.searchParams.set('email', email);
   url.searchParams.set('token', token);
   return url.toString();

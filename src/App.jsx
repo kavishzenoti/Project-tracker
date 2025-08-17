@@ -23,7 +23,11 @@ const AppContent = () => {
   }
 
   // Check if we're on the magic link verification route
-  if (window.location.pathname === '/auth/verify') {
+  // Handle both local development and GitHub Pages paths
+  const currentPath = window.location.pathname;
+  const isVerificationRoute = currentPath === '/auth/verify' || currentPath === '/Project-tracker/auth/verify';
+  
+  if (isVerificationRoute) {
     return <MagicLinkVerification />;
   }
 
