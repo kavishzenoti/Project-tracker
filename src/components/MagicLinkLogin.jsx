@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMagicLinkAuth } from '../contexts/MagicLinkAuthContext.jsx';
+import { createMagicLink } from '../utils/magicLink.js';
 import { 
   Mail, 
   Lock, 
@@ -33,10 +34,8 @@ const MagicLinkLogin = () => {
       const result = await sendMagicLink(email);
       if (result.success) {
         setIsLinkSent(true);
-        // For demo purposes, we'll show the magic link directly
-        // In production, this would be sent via email
-        const baseUrl = window.location.origin;
-        const demoLink = `${baseUrl}/auth/verify?email=${encodeURIComponent(email)}&token=demo-token`;
+        // For demo purposes, show the magic link directly (with correct base path on GitHub Pages)
+        const demoLink = createMagicLink(email, 'demo-token', window.location.origin);
         setMagicLink(demoLink);
       }
     } catch (error) {
