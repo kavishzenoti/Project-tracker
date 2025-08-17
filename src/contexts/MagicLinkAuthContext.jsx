@@ -25,6 +25,8 @@ export const useMagicLinkAuth = () => {
 
 // Authentication provider component
 export const MagicLinkAuthProvider = ({ children }) => {
+  console.log('MagicLinkAuthProvider: Component mounting...');
+  
   const [authState, setAuthState] = useState('loading');
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -33,27 +35,36 @@ export const MagicLinkAuthProvider = ({ children }) => {
 
   // Initialize authentication state on component mount
   useEffect(() => {
+    console.log('MagicLinkAuthProvider: Initializing authentication...');
+    
     const initializeAuth = async () => {
       try {
+        console.log('MagicLinkAuthProvider: Checking if user is authenticated...');
+        
         // Check if user is already authenticated via magic link
         if (isMagicLinkAuthenticated()) {
+          console.log('MagicLinkAuthProvider: User is authenticated, getting user data...');
           const currentUser = getMagicLinkUser();
           if (currentUser) {
+            console.log('MagicLinkAuthProvider: User data found:', currentUser);
             setUser(currentUser);
             setAuthState('authenticated');
           } else {
+            console.log('MagicLinkAuthProvider: User data invalid, clearing...');
             // Clear invalid data
             clearMagicLinkData();
             setAuthState('unauthenticated');
           }
         } else {
+          console.log('MagicLinkAuthProvider: User not authenticated');
           setAuthState('unauthenticated');
         }
       } catch (error) {
-        console.error('Authentication initialization error:', error);
+        console.error('MagicLinkAuthProvider: Authentication initialization error:', error);
         setError(error.message);
         setAuthState('error');
       } finally {
+        console.log('MagicLinkAuthProvider: Initialization complete, setting isInitializing to false');
         setIsInitializing(false);
       }
     };
