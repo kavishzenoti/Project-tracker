@@ -44,7 +44,7 @@ export const sendMagicLinkEmail = async (email, magicLink) => {
   console.log('🔐 Magic Link Generated:');
   console.log('📧 To:', email);
   console.log('🔗 Link:', magicLink);
-  console.log('⏰ Expires in: 15 minutes');
+  console.log('⏰ Expires in: 1 hour');
   
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -54,7 +54,7 @@ export const sendMagicLinkEmail = async (email, magicLink) => {
 
 // Store magic link data in localStorage (in production, use a database)
 export const storeMagicLinkData = (email, token) => {
-  const expirationTime = Date.now() + (15 * 60 * 1000); // 15 minutes
+  const expirationTime = Date.now() + (60 * 60 * 1000); // 1 hour
   
   const magicLinkData = {
     email,

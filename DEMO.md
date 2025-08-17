@@ -28,7 +28,7 @@ Navigate to `http://localhost:3000`
    🔐 Magic Link Generated:
    📧 To: test@example.com
    🔗 Link: http://localhost:3000/auth/verify?email=test%40example.com&token=demo-token
-   ⏰ Expires in: 15 minutes
+   ⏰ Expires in: 1 hour
    ```
 
 3. **Use the Magic Link**
@@ -45,14 +45,14 @@ Navigate to `http://localhost:3000`
 
 ### **Magic Link Flow**
 1. **User enters email** → System generates secure token
-2. **Token stored locally** → 15-minute expiration timer starts
+2. **Token stored locally** → 1-hour expiration timer starts
 3. **Magic link created** → Contains email and token as URL parameters
 4. **User clicks link** → System validates token and email
 5. **Authentication complete** → User redirected to main application
 
 ### **Security Features**
 - **Secure Tokens**: 32-byte random tokens (cryptographically secure)
-- **Automatic Expiration**: Links expire after 15 minutes
+- **Automatic Expiration**: Links expire after 1 hour
 - **Email Validation**: Links only work for the email they were sent to
 - **Local Storage**: Sensitive data cleared after successful authentication
 
@@ -91,7 +91,7 @@ Navigate to `http://localhost:3000`
 ## 🔧 Troubleshooting
 
 ### **Magic Link Not Working?**
-1. Check that the link hasn't expired (15 minutes)
+1. Check that the link hasn't expired (1 hour)
 2. Ensure you're using the link for the correct email
 3. Clear browser localStorage if needed
 4. Check browser console for error messages

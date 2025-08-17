@@ -225,7 +225,7 @@ const MagicLinkLogin = () => {
           </div>
           <div className="text-xs text-gray-400 space-y-1">
             <p>• No passwords to remember</p>
-            <p>• Links expire in 15 minutes</p>
+            <p>• Links expire in 1 hour</p>
             <p>• Secure token-based authentication</p>
           </div>
         </div>

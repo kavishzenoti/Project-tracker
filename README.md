@@ -21,7 +21,7 @@ The application now uses modern, secure magic link authentication:
 
 - **Passwordless Login** - No passwords to remember or manage
 - **Email-Based** - Secure login links sent to user's email
-- **Token Expiration** - Links automatically expire after 15 minutes
+- **Token Expiration** - Links automatically expire after 1 hour
 - **Secure Storage** - Authentication data stored securely in localStorage
 - **Role-Based Access Control** - Automatic admin detection based on email domains
 

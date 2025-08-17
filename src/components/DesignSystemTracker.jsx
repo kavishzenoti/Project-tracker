@@ -883,7 +883,7 @@ const DesignSystemTracker = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-full mx-auto">
-        <div className="mb-8">
+        <div className="mb-8 sticky top-0 z-20 bg-gray-50 pt-2 pb-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold text-gray-900">Design System Task Tracker</h1>
             {currentUser && (
