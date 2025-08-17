@@ -12,6 +12,8 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+
 const MagicLinkLogin = () => {
   // Removed unused context values
   // const { authState, error } = useMagicLinkAuth();
@@ -42,28 +44,36 @@ const MagicLinkLogin = () => {
 
     try {
       setIsSendingCode(true);
-      
-      // Generate a 6-digit verification code
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      // Store the code temporarily (in production, this would go to a server)
-      localStorage.setItem('verification_code', JSON.stringify({
-        email,
-        code,
-        expiresAt: Date.now() + (10 * 60 * 1000) // 10 minutes
-      }));
 
-      // Simulate sending email (in production, this would send an actual email)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setCodeSent(true);
-      setSuccess(`Verification code sent to ${email}`);
-      
-      // For demo purposes, show the code in console
-      console.log(`Demo: Verification code for ${email}: ${code}`);
-      
+      if (API_BASE) {
+        // Secure path: call serverless API to send the code
+        const resp = await fetch(`${API_BASE.replace(/\/$/, '')}/api/send-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.success || !data.token) {
+          throw new Error(data.error || 'Failed to send code');
+        }
+        // Store verification token for next step
+        localStorage.setItem('verification_token', data.token);
+        setCodeSent(true);
+        setSuccess(`Verification code sent to ${email}`);
+      } else {
+        // Demo fallback: local generation (no real email)
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('verification_code', JSON.stringify({
+          email,
+          code,
+          expiresAt: Date.now() + (10 * 60 * 1000)
+        }));
+        setCodeSent(true);
+        setSuccess(`Verification code (demo) generated. Check console.`);
+        console.log(`Demo: Verification code for ${email}: ${code}`);
+      }
     } catch (err) {
-      setLocalError('Failed to send verification code. Please try again.');
+      setLocalError(err.message || 'Failed to send verification code. Please try again.');
     } finally {
       setIsSendingCode(false);
     }
@@ -81,53 +91,59 @@ const MagicLinkLogin = () => {
 
     try {
       setIsVerifying(true);
-      
-      // Get stored verification code
-      const stored = JSON.parse(localStorage.getItem('verification_code') || 'null');
-      
-      if (!stored || stored.email !== email) {
-        setLocalError('Verification code expired. Please request a new one.');
-        return;
-      }
 
-      if (Date.now() > stored.expiresAt) {
-        setLocalError('Verification code expired. Please request a new one.');
+      if (API_BASE) {
+        const token = localStorage.getItem('verification_token');
+        if (!token) {
+          throw new Error('Missing verification token. Please request a new code.');
+        }
+        const resp = await fetch(`${API_BASE.replace(/\/$/, '')}/api/verify-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code: verificationCode, token }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.success || !data.user) {
+          throw new Error(data.error || 'Verification failed');
+        }
+        // Persist session
+        localStorage.setItem('auth_user', JSON.stringify({
+          user: data.user,
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000)
+        }));
+        // Clean temp token
+        localStorage.removeItem('verification_token');
+      } else {
+        // Demo fallback verification
+        const stored = JSON.parse(localStorage.getItem('verification_code') || 'null');
+        if (!stored || stored.email !== email) {
+          setLocalError('Verification code expired. Please request a new one.');
+          return;
+        }
+        if (Date.now() > stored.expiresAt) {
+          setLocalError('Verification code expired. Please request a new one.');
+          localStorage.removeItem('verification_code');
+          return;
+        }
+        if (stored.code !== verificationCode) {
+          setLocalError('Invalid verification code. Please try again.');
+          return;
+        }
+        const userInfo = {
+          id: Date.now(),
+          name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+          email: email,
+          role: 'Design System User',
+          isAdmin: email.endsWith('@zenoti.com')
+        };
+        localStorage.setItem('auth_user', JSON.stringify({ user: userInfo, expiresAt: Date.now() + (24 * 60 * 60 * 1000) }));
         localStorage.removeItem('verification_code');
-        return;
       }
 
-      if (stored.code !== verificationCode) {
-        setLocalError('Invalid verification code. Please try again.');
-        return;
-      }
-
-      // Success! Create user object and authenticate
-      const userInfo = {
-        id: Date.now(),
-        name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-        email: email,
-        role: "Design System User",
-        isAdmin: email.endsWith('@zenoti.com')
-      };
-
-      // Store user session
-      localStorage.setItem('auth_user', JSON.stringify({
-        user: userInfo,
-        expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-      }));
-
-      // Clear verification code
-      localStorage.removeItem('verification_code');
-      
       setSuccess('Authentication successful! Redirecting...');
-      
-      // Redirect to main app
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-      
+      setTimeout(() => window.location.reload(), 800);
     } catch (err) {
-      setLocalError('Verification failed. Please try again.');
+      setLocalError(err.message || 'Verification failed. Please try again.');
     } finally {
       setIsVerifying(false);
     }

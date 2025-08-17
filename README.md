@@ -15,22 +15,22 @@ A React-based project management tool for tracking design system tasks across we
 - **🔄 Change Logging**: Track all user actions and modifications
 - **🔒 Secure**: PKCE flow, CSRF protection, and secure token storage
 
-## 🔐 Magic Link Authentication
+## 🔐 Email Code Authentication
 
-The application now uses modern, secure magic link authentication:
+The application supports a secure email code (OTP) authentication flow:
 
 - **Passwordless Login** - No passwords to remember or manage
-- **Email-Based** - Secure login links sent to user's email
-- **Token Expiration** - Links automatically expire after 1 hour
-- **Secure Storage** - Authentication data stored securely in localStorage
-- **Role-Based Access Control** - Automatic admin detection based on email domains
+- **Email-Based** - 6-digit verification codes sent to user's email
+- **Code Expiration** - Codes expire after 10 minutes
+- **Secure Storage** - Session stored securely in localStorage (24h)
+- **Role-Based Access Control** - Admin detection based on `@zenoti.com`
 
 ### Security Features
 
-- **Secure Token Generation** - Cryptographically secure random tokens
-- **Automatic Expiration** - Links expire to prevent unauthorized access
-- **Email Validation** - Ensures links are used by the intended recipient
-- **Local Storage Security** - Sensitive data cleared after use
+- **Stateless Server** - Codes are never stored server-side; only HMAC-hashed in a signed token with TTL
+- **Automatic Expiration** - Tokens and codes expire to prevent reuse
+- **Email Validation** - Ensures codes are used by intended recipient
+- **Local Storage Security** - Sensitive temp data cleared after use
 - **HTTPS Ready** - Works seamlessly with secure connections
 
 ## Getting Started
@@ -81,11 +81,17 @@ npm run preview
 
 ### Authentication
 
-1. **First Visit**: You'll see the magic link login screen
-2. **Enter Email**: Type your email address and click "Send Magic Link"
-3. **Check Console**: The magic link will be logged to your browser console
-4. **Click Link**: Copy and open the magic link to automatically sign in
-5. **Access**: Once authenticated, you'll have access to the full application
+Two modes:
+
+- Secure (recommended):
+  1. Enter your `@zenoti.com` email and click "Send Verification Code"
+  2. Check your inbox for a 6-digit code
+  3. Enter the code to sign in (code expires in 10 minutes)
+
+- Demo fallback (when no API configured):
+  1. Enter email and click "Send Verification Code"
+  2. Code is logged to the console (no real email sent)
+  3. Enter code to sign in
 
 ### Basic Navigation
 
@@ -142,8 +148,8 @@ src/
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
 - **Lucide React** - Icon library
-- **Magic Links** - Passwordless authentication
-- **Secure Tokens** - Cryptographically secure authentication
+- **Email OTP** - Passwordless authentication
+- **HMAC Tokens** - Stateless signed tokens for verification
 
 ## Customization
 
@@ -180,12 +186,28 @@ const statusOptions = [
 ];
 ```
 
-## Production Deployment
+## Environment and Deployment
+## Secure Email Flow (Vercel + Resend)
 
-1. **Update Environment Variables:**
-   - Set production redirect URIs
-   - Configure production OAuth applications
-   - Set appropriate CORS policies
+1) Create a Resend account and API key. Configure a sender domain/address.
+2) Deploy the `api/` directory to Vercel (import repo or add as project).
+3) Set Vercel env vars: `RESEND_API_KEY`, `AUTH_FROM_EMAIL`, `AUTH_HMAC_SECRET`, `APP_ORIGINS`.
+4) Set `VITE_API_BASE_URL` in the frontend (GitHub Pages build) to the Vercel URL.
+5) Redeploy. Login will use the secure email flow automatically.
+
+Security notes:
+- Codes are HMAC-hashed and carried in a signed token with TTL; no DB is required.
+- Add rate limits/IP throttling at the edge as needed.
+
+
+Frontend (Vite):
+- `VITE_API_BASE_URL` → Set to your API base (e.g. Vercel URL) to enable secure email delivery
+
+Serverless API (Vercel):
+- `RESEND_API_KEY` → Resend API key
+- `AUTH_FROM_EMAIL` → Sender, e.g. `Project Tracker <no-reply@yourdomain.com>`
+- `AUTH_HMAC_SECRET` → Long random secret for signing/hashing
+- `APP_ORIGINS` → Comma-separated origins for CORS (e.g., `http://localhost:5173,https://kavishzenoti.github.io`)
 
 2. **Security Considerations:**
    - Enable HTTPS
@@ -196,7 +218,7 @@ const statusOptions = [
 3. **Build and Deploy:**
    ```bash
    npm run build
-   # Deploy the dist/ folder to your web server
+   # GitHub Pages uses docs/ output automatically
    ```
 
 ## Troubleshooting
