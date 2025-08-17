@@ -11,6 +11,22 @@ import {
   validateMagicToken
 } from '../utils/magicLink.js';
 
+// Team members list for email validation
+const TEAM_MEMBERS = [
+  { id: 7, name: "Adit", role: "Design System Governance", email: "aditk@zenoti.com", isAdmin: true },
+  { id: 4, name: "Agam", role: "Design System Governance", email: "agamm@zenoti.com", isAdmin: false },
+  { id: 1, name: "Charissa", role: "Design System Governance", email: "charissag@zenoti.com", isAdmin: false },
+  { id: 6, name: "Kavish", role: "Design System Governance", email: "kavisht@zenoti.com", isAdmin: true },
+  { id: 3, name: "Nitin", role: "Design System Governance", email: "nitinb@zenoti.com", isAdmin: false },
+  { id: 2, name: "Praveen", role: "Design System Governance", email: "praveenh@zenoti.com", isAdmin: false },
+  { id: 5, name: "Subhranta", role: "Design System Governance", email: "subhrantam@zenoti.com", isAdmin: false }
+];
+
+// Function to validate if email belongs to a team member
+const validateTeamMemberEmail = (email) => {
+  return TEAM_MEMBERS.some(member => member.email.toLowerCase() === email.toLowerCase());
+};
+
 // Create authentication context
 const MagicLinkAuthContext = createContext();
 
@@ -94,6 +110,11 @@ export const MagicLinkAuthProvider = ({ children }) => {
         throw new Error('Please enter a valid email address');
       }
 
+      // Validate if email belongs to a team member
+      if (!validateTeamMemberEmail(email)) {
+        throw new Error('You are not authorized to use this magic link. Please contact an administrator.');
+      }
+
       // Generate secure token
       const token = generateMagicToken();
       
@@ -125,22 +146,30 @@ export const MagicLinkAuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Verify magic link token
+  // Verify magic link and authenticate user
   const verifyMagicLink = useCallback(async (email, token) => {
     try {
-      setAuthState('loading');
       setError(null);
+      setAuthState('loading');
+      
+      // Validate email format
+      if (!email || !email.includes('@')) {
+        throw new Error('Invalid email address');
+      }
+
+      // Validate if email belongs to a team member
+      if (!validateTeamMemberEmail(email)) {
+        throw new Error('You are not authorized to use this magic link. Please contact an administrator.');
+      }
 
       // Get stored magic link data
       const storedData = getMagicLinkData();
-      
       if (!storedData) {
         throw new Error('Magic link expired or invalid. Please request a new one.');
       }
 
       // Validate token
       const isValid = validateMagicToken(token, storedData.token, storedData.expirationTime);
-      
       if (!isValid) {
         throw new Error('Invalid or expired magic link. Please request a new one.');
       }
@@ -150,8 +179,19 @@ export const MagicLinkAuthProvider = ({ children }) => {
         throw new Error('Email mismatch. Please use the link sent to your email.');
       }
 
-      // Get user information
-      const userInfo = getMagicLinkUser();
+      // Get user information from team members list
+      const teamMember = TEAM_MEMBERS.find(member => member.email.toLowerCase() === email.toLowerCase());
+      if (!teamMember) {
+        throw new Error('User not found in team members list');
+      }
+
+      const userInfo = {
+        id: teamMember.id,
+        name: teamMember.name,
+        email: teamMember.email,
+        role: teamMember.role,
+        isAdmin: teamMember.isAdmin
+      };
       
       // Update state
       setUser(userInfo);

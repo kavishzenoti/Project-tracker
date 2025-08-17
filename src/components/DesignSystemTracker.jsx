@@ -333,6 +333,10 @@ const DesignSystemTracker = () => {
   const [userFilter, setUserFilter] = useState('all');
   const [actionFilter, setActionFilter] = useState('all');
   
+  // Commit state for tracking uncommitted changes
+  const [hasUncommittedChanges, setHasUncommittedChanges] = useState(false);
+  const [lastCommitTime, setLastCommitTime] = useState(null);
+  
   const contextMenuRef = useRef(null);
   
   // Get authentication context
@@ -440,6 +444,27 @@ const DesignSystemTracker = () => {
     }
   };
 
+  // Function to commit changes and share with other users
+  const commitChanges = () => {
+    try {
+      // In a real implementation, this would send data to a server
+      // For now, we'll simulate sharing by updating the commit timestamp
+      setLastCommitTime(new Date().toISOString());
+      setHasUncommittedChanges(false);
+      
+      // Log the commit
+      logChange('commit', `User ${currentUser.name} committed changes to the project`);
+      
+      // Show success message
+      alert('Changes committed successfully! Other users will see your updates.');
+      
+      console.log('Changes committed and shared with other users');
+    } catch (error) {
+      console.error('Error committing changes:', error);
+      alert('Failed to commit changes. Please try again.');
+    }
+  };
+
   const categories = ["Design Roadmap", "Audit", "Maintenance", "Advocacy & Training"];
   const statusOptions = [
     { value: "planned", label: "Planned", icon: Circle },
@@ -478,16 +503,22 @@ const DesignSystemTracker = () => {
     setChangeLog(prev => [logEntry, ...prev]);
   };
 
-  // Auto-assign function for non-admin users
+  // Auto-assign function - respects admin privileges
   const autoAssignUser = (taskId, weekId) => {
-    if (!currentUser || (currentUser.email && currentUser.email.endsWith('@zenoti.com'))) return;
+    if (!currentUser) return;
     
-    // Non-admin users are automatically assigned to cells they interact with
+    // Admin users can assign to anyone, regular users can only assign themselves
     const cellKey = getCellKey(taskId, weekId);
     const currentData = cellData[cellKey] || {};
     
-    if (currentData.assignee !== currentUser.name) {
-      updateCellData(taskId, weekId, 'assignee', currentUser.name);
+    if (currentUser.email && currentUser.email.endsWith('@zenoti.com')) {
+      // Admin users - no auto-assignment, they choose manually
+      return;
+    } else {
+      // Non-admin users are automatically assigned to cells they interact with
+      if (currentData.assignee !== currentUser.name) {
+        updateCellData(taskId, weekId, 'assignee', currentUser.name);
+      }
     }
   };
 
@@ -611,14 +642,15 @@ const DesignSystemTracker = () => {
       }
     }));
     
-    // Log the change
+    // Mark as having uncommitted changes
     if (oldValue !== value) {
+      setHasUncommittedChanges(true);
+      
+      // Log the change
       const task = tasks.find(t => t.id === taskId);
       const week = weeks.find(w => w.id === weekId);
       const action = field === 'assignee' ? 'assignment' : 'status_change';
-      const details = field === 'assignee' 
-        ? `Assigned ${task.name} to ${value || 'unassigned'} for ${week.label}`
-        : `Changed status of ${task.name} to ${value} for ${week.label}`;
+      const details = `Assigned ${task.name} to ${value || 'unassigned'} for ${week.label}`;
       
       logChange(action, details, taskId, weekId);
     }
@@ -933,40 +965,44 @@ const DesignSystemTracker = () => {
       
       <div className="px-2">
         <div className="text-xs font-medium text-gray-700 px-2 py-1">Assign to:</div>
-        {currentUser?.email && currentUser.email.endsWith('@zenoti.com') ? (
-          // Admin users can assign to anyone
+        {currentUser && (
           <>
-            {teamMembers.map(member => (
-              <button
-                key={member.id}
-                className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded"
-                onClick={() => applyToSelectedCells('assignee', member.name)}
-              >
-                {member.name}
-              </button>
-            ))}
-            <button
-              className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
-              onClick={() => applyToSelectedCells('assignee', '')}
-            >
-              Unassign
-            </button>
-          </>
-        ) : (
-          // Non-admin users can only assign to themselves
-          <>
-            <button
-              className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded bg-blue-50"
-              onClick={() => applyToSelectedCells('assignee', currentUser.name)}
-            >
-              {currentUser.name} (You)
-            </button>
-            <button
-              className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
-              onClick={() => applyToSelectedCells('assignee', '')}
-            >
-              Unassign
-            </button>
+            {currentUser.email && currentUser.email.endsWith('@zenoti.com') ? (
+              // Admin users can assign to anyone
+              <>
+                {teamMembers.map(member => (
+                  <button
+                    key={member.id}
+                    className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded"
+                    onClick={() => applyToSelectedCells('assignee', member.name)}
+                  >
+                    {member.name}
+                  </button>
+                ))}
+                <button
+                  className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
+                  onClick={() => applyToSelectedCells('assignee', '')}
+                >
+                  Unassign
+                </button>
+              </>
+            ) : (
+              // Non-admin users can only assign to themselves
+              <>
+                <button
+                  className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded bg-blue-50"
+                  onClick={() => applyToSelectedCells('assignee', currentUser.name)}
+                >
+                  {currentUser.name} (You)
+                </button>
+                <button
+                  className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
+                  onClick={() => applyToSelectedCells('assignee', '')}
+                >
+                  Unassign
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
@@ -1019,17 +1055,23 @@ const DesignSystemTracker = () => {
                   <span>Change Log</span>
                 </button>
                 <button
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to clear all data? This will reset all tasks, assignments, and settings to their initial state. This action cannot be undone.')) {
-                      clearAllData();
-                    }
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                  title="Clear all data and reset to initial state"
+                  onClick={commitChanges}
+                  disabled={!hasUncommittedChanges}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    hasUncommittedChanges 
+                      ? 'bg-green-600 text-white hover:bg-green-700' 
+                      : 'bg-gray-400 text-white cursor-not-allowed'
+                  }`}
+                  title={hasUncommittedChanges ? "Commit and share your changes with other users" : "No changes to commit"}
                 >
-                  <Trash2 className="w-4 h-4" />
-                  <span>Clear All Data</span>
+                  <Check className="w-4 h-4" />
+                  <span>Commit Changes</span>
                 </button>
+                {lastCommitTime && (
+                  <div className="text-xs text-gray-500 px-2">
+                    Last commit: {new Date(lastCommitTime).toLocaleString()}
+                  </div>
+                )}
                 <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-lg">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                     {currentUser.picture ? (

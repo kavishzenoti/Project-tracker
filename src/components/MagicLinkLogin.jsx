@@ -227,6 +227,20 @@ const MagicLinkLogin = () => {
             <p>• No passwords to remember</p>
             <p>• Links expire in 1 hour</p>
             <p>• Secure token-based authentication</p>
+            <p>• Only authorized team members can access</p>
+          </div>
+          
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="text-xs font-medium text-blue-700 mb-2">Authorized Team Members:</div>
+            <div className="text-xs text-blue-600 space-y-1">
+              <div>• aditk@zenoti.com (Adit)</div>
+              <div>• agamm@zenoti.com (Agam)</div>
+              <div>• charissag@zenoti.com (Charissa)</div>
+              <div>• kavisht@zenoti.com (Kavish)</div>
+              <div>• nitinb@zenoti.com (Nitin)</div>
+              <div>• praveenh@zenoti.com (Praveen)</div>
+              <div>• subhrantam@zenoti.com (Subhranta)</div>
+            </div>
           </div>
         </div>
 
