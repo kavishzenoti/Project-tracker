@@ -258,15 +258,15 @@ const DesignSystemTracker = () => {
     return () => window.removeEventListener('resize', updateAddInputWidth);
   }, []);
 
-  // Generate weeks starting from current week
+  // Generate weeks starting from August 18th (fixed 16-week plan)
   const generateWeeks = () => {
     const weeks = [];
-    const today = new Date();
-    const currentWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    // Start date: August 18th, 2024
+    const startDate = new Date('2024-08-18');
     
-    for (let i = 0; i < 12; i++) {
-      const weekStart = new Date(currentWeek);
-      weekStart.setDate(currentWeek.getDate() + (i * 7));
+    for (let i = 0; i < 16; i++) {
+      const weekStart = new Date(startDate);
+      weekStart.setDate(startDate.getDate() + (i * 7));
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekStart.getDate() + 6);
       
