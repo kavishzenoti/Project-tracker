@@ -122,3 +122,45 @@ export const getMagicLinkUser = () => {
     verified: true
   };
 };
+
+// Persist an authenticated user session (separate from the temporary magic link data)
+export const storeAuthenticatedUser = (user, ttlMs = 24 * 60 * 60 * 1000) => {
+  try {
+    const payload = {
+      user,
+      expiresAt: Date.now() + ttlMs
+    };
+    localStorage.setItem('auth_user', JSON.stringify(payload));
+    return true;
+  } catch (error) {
+    console.error('Failed to store authenticated user:', error);
+    return false;
+  }
+};
+
+export const getAuthenticatedUser = () => {
+  try {
+    const raw = localStorage.getItem('auth_user');
+    if (!raw) return null;
+    const payload = JSON.parse(raw);
+    if (!payload || typeof payload !== 'object') return null;
+    if (Date.now() > payload.expiresAt) {
+      localStorage.removeItem('auth_user');
+      return null;
+    }
+    return payload.user || null;
+  } catch (error) {
+    console.error('Failed to get authenticated user:', error);
+    return null;
+  }
+};
+
+export const clearAuthenticatedUser = () => {
+  try {
+    localStorage.removeItem('auth_user');
+    return true;
+  } catch (error) {
+    console.error('Failed to clear authenticated user:', error);
+    return false;
+  }
+};

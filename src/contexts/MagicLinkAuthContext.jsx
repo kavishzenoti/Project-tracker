@@ -41,9 +41,20 @@ export const MagicLinkAuthProvider = ({ children }) => {
       try {
         console.log('MagicLinkAuthProvider: Checking if user is authenticated...');
         
-        // Check if user is already authenticated via magic link
+        // Load persisted authenticated user session if present
+        try {
+          const persisted = JSON.parse(localStorage.getItem('auth_user') || 'null');
+          if (persisted && persisted.user && Date.now() < persisted.expiresAt) {
+            console.log('MagicLinkAuthProvider: Found persisted user session');
+            setUser(persisted.user);
+            setAuthState('authenticated');
+            return;
+          }
+        } catch (_) {}
+
+        // Otherwise, check if user is already authenticated via magic link
         if (isMagicLinkAuthenticated()) {
-          console.log('MagicLinkAuthProvider: User is authenticated, getting user data...');
+          console.log('MagicLinkAuthProvider: User is authenticated via magic link, getting user data...');
           const currentUser = getMagicLinkUser();
           if (currentUser) {
             console.log('MagicLinkAuthProvider: User data found:', currentUser);
@@ -145,6 +156,14 @@ export const MagicLinkAuthProvider = ({ children }) => {
       // Update state
       setUser(userInfo);
       setAuthState('authenticated');
+
+      // Persist user session for 24h so reloads work on GitHub Pages
+      try {
+        const payload = { user: userInfo, expiresAt: Date.now() + 24 * 60 * 60 * 1000 };
+        localStorage.setItem('auth_user', JSON.stringify(payload));
+      } catch (e) {
+        console.warn('Persist user failed (non-blocking):', e);
+      }
       
       // Clear magic link data after successful verification
       clearMagicLinkData();

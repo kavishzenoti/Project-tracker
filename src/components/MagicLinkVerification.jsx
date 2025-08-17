@@ -24,8 +24,9 @@ const MagicLinkVerification = () => {
         
         // Redirect to the main application after successful verification
         setTimeout(() => {
-          window.location.href = '/';
-        }, 2000);
+          const base = window.location.hostname.includes('github.io') ? '/Project-tracker/' : '/';
+          window.location.replace(base);
+        }, 1200);
         
       } catch (error) {
         console.error('Magic link verification error:', error);
@@ -70,13 +71,19 @@ const MagicLinkVerification = () => {
             </p>
             <div className="space-y-3">
               <button
-                onClick={() => window.location.href = '/'}
+                onClick={() => {
+                  const base = window.location.hostname.includes('github.io') ? '/Project-tracker/' : '/';
+                  window.location.href = base;
+                }}
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Try Again
               </button>
               <button
-                onClick={() => window.location.href = '/login'}
+                onClick={() => {
+                  const base = window.location.hostname.includes('github.io') ? '/Project-tracker/' : '/';
+                  window.location.href = base;
+                }}
                 className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
               >
                 Back to Login
