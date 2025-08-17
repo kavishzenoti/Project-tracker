@@ -243,7 +243,14 @@ const DesignSystemTracker = () => {
     document.head.appendChild(style);
     
     return () => {
-      document.head.removeChild(style);
+      // Safety check: ensure the style element still exists before removing
+      if (style && style.parentNode) {
+        try {
+          document.head.removeChild(style);
+        } catch (error) {
+          console.warn('Style element already removed:', error);
+        }
+      }
     };
   }, []);
 
