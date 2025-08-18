@@ -25,11 +25,26 @@
         );
       }
     </script>
-    <script type="module" crossorigin src="./assets/index-8e6efdb0.js"></script>
-    <link rel="stylesheet" href="./assets/index-a8374212.css">
+    <script type="module" crossorigin src="./assets/index-2704495a.js"></script>
+    <link rel="stylesheet" href="./assets/index-69e39a7c.css">
   </head>
   <body>
     <div id="root"></div>
     
+    <script>
+      // Error handling for debugging
+      window.addEventListener('error', function(e) {
+        console.error('Global error:', e.error);
+        document.getElementById('root').innerHTML = '<div style="padding: 20px; color: red;">Error loading app: ' + e.error.message + '</div>';
+      });
+      
+      // Check if app loads
+      setTimeout(function() {
+        if (document.getElementById('root').children.length === 0) {
+          console.log('App not loaded after 3 seconds, checking...');
+          document.getElementById('root').innerHTML = '<div style="padding: 20px; color: orange;">App is loading... If this persists, check console for errors.</div>';
+        }
+      }, 3000);
+    </script>
   </body>
 </html> 

@@ -243,14 +243,7 @@ const DesignSystemTracker = () => {
     document.head.appendChild(style);
     
     return () => {
-      // Safety check: ensure the style element still exists before removing
-      if (style && style.parentNode) {
-        try {
-          document.head.removeChild(style);
-        } catch (error) {
-          console.warn('Style element already removed:', error);
-        }
-      }
+      document.head.removeChild(style);
     };
   }, []);
 
@@ -518,7 +511,7 @@ const DesignSystemTracker = () => {
     const cellKey = getCellKey(taskId, weekId);
     const currentData = cellData[cellKey] || {};
     
-    if (currentUser.email && currentUser.email.endsWith('@zenoti.com')) {
+    if (currentUser.isAdmin) {
       // Admin users - no auto-assignment, they choose manually
       return;
     } else {
@@ -974,7 +967,7 @@ const DesignSystemTracker = () => {
         <div className="text-xs font-medium text-gray-700 px-2 py-1">Assign to:</div>
         {currentUser && (
           <>
-            {currentUser.email && currentUser.email.endsWith('@zenoti.com') ? (
+            {currentUser.isAdmin ? (
               // Admin users can assign to anyone
               <>
                 {teamMembers.map(member => (
@@ -1094,7 +1087,7 @@ const DesignSystemTracker = () => {
                   <div className="text-sm">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-gray-900">{currentUser.name}</span>
-                      {currentUser.email && currentUser.email.endsWith('@zenoti.com') && (
+                      {currentUser.isAdmin && (
                         <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">
                           Admin
                         </span>
@@ -1328,7 +1321,7 @@ const DesignSystemTracker = () => {
                           } ${
                             isDragging && draggedTask?.id !== task.id && draggedTask?.category === task.category ? 'cursor-pointer' : ''
                           }`}
-                          draggable={currentUser?.email && currentUser.email.endsWith('@zenoti.com')}
+                          draggable={currentUser?.isAdmin}
                           onDragStart={(e) => handleDragStart(e, task)}
                           onDragEnd={handleDragEnd}
                           onDragOver={(e) => handleDragOver(e, task)}
@@ -1374,7 +1367,7 @@ const DesignSystemTracker = () => {
                                     </div>
                                   ) : (
                                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                                      {currentUser?.email && currentUser.email.endsWith('@zenoti.com') && (
+                                      {currentUser?.isAdmin && (
                                         <div className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing flex-shrink-0">
                                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
