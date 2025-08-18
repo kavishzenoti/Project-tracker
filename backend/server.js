@@ -54,9 +54,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS !== 'false',
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'lax' // Allow cross-site requests
   }
 }));
 
@@ -65,9 +66,23 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Debug endpoint for session troubleshooting
+app.get('/api/debug/session', (req, res) => {
+  res.json({
+    sessionId: req.sessionID,
+    sessionData: req.session,
+    cookies: req.headers.cookie,
+    userAgent: req.headers['user-agent'],
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Authentication endpoints
 app.post('/api/auth/login', (req, res) => {
   const { email } = req.body;
+  
+  console.log('🔐 Login attempt for email:', email);
+  console.log('📋 Session ID:', req.sessionID);
   
   // Validate email against team members (you can customize this)
   const teamMembers = [
@@ -77,15 +92,35 @@ app.post('/api/auth/login', (req, res) => {
   ];
   
   if (!teamMembers.includes(email)) {
+    console.log('❌ Unauthorized email:', email);
     return res.status(401).json({ error: 'Unauthorized email' });
   }
   
   // Store user in session
   req.session.user = { email, isAuthenticated: true };
-  res.json({ success: true, user: { email } });
+  
+  // Force session save
+  req.session.save((err) => {
+    if (err) {
+      console.error('❌ Session save error:', err);
+      return res.status(500).json({ error: 'Failed to create session' });
+    }
+    
+    console.log('✅ Session created for:', email);
+    console.log('🔑 Session data:', req.session);
+    
+    res.json({ 
+      success: true, 
+      user: { email },
+      sessionId: req.sessionID 
+    });
+  });
 });
 
 app.get('/api/auth/status', (req, res) => {
+  console.log('🔍 Auth status check - Session ID:', req.sessionID);
+  console.log('🔍 Session data:', req.session);
+  
   if (req.session.user && req.session.user.isAuthenticated) {
     res.json({ 
       isAuthenticated: true, 
