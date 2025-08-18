@@ -6,25 +6,6 @@ class BackendProxy {
     this.baseUrl = BACKEND_CONFIG.BASE_URL;
   }
 
-  // Get authentication status from backend
-  async getAuthStatus() {
-    try {
-      const response = await fetch(
-        getBackendApiUrl(BACKEND_CONFIG.ENDPOINTS.AUTH.STATUS),
-        getRequestConfig('GET')
-      );
-
-      if (!response.ok) {
-        throw new Error(`Auth check failed: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error checking auth status:', error);
-      throw error;
-    }
-  }
-
   // Authenticate user with backend (using magic link email)
   async authenticateUser(email) {
     try {
@@ -106,6 +87,25 @@ class BackendProxy {
       return await response.json();
     } catch (error) {
       console.error('Error checking permissions:', error);
+      throw error;
+    }
+  }
+
+  // Get authentication status from backend
+  async getAuthStatus() {
+    try {
+      const response = await fetch(
+        getBackendApiUrl(BACKEND_CONFIG.ENDPOINTS.AUTH.STATUS),
+        getRequestConfig('GET')
+      );
+
+      if (!response.ok) {
+        throw new Error(`Auth check failed: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error checking auth status:', error);
       throw error;
     }
   }

@@ -481,6 +481,16 @@ const DesignSystemTracker = () => {
       if (isBackendProxyEnabled()) {
         // Use secure backend proxy
         const backend = new BackendProxy();
+        
+        // First authenticate with backend
+        try {
+          await backend.authenticateUser(currentUser.email);
+          console.log('✅ Authenticated with backend for commit');
+        } catch (authError) {
+          console.error('❌ Backend authentication failed for commit:', authError);
+          throw new Error('Failed to authenticate with backend. Please try logging in again.');
+        }
+        
         await backend.commitData(dataToCommit, `Update by ${currentUser.name}`);
       } else {
         // Direct GitHub flow requires user token
@@ -520,6 +530,16 @@ const DesignSystemTracker = () => {
 
       if (isBackendProxyEnabled()) {
         const backend = new BackendProxy();
+        
+        // First authenticate with backend using current user's email
+        try {
+          await backend.authenticateUser(currentUser.email);
+          console.log('✅ Authenticated with backend');
+        } catch (authError) {
+          console.error('❌ Backend authentication failed:', authError);
+          throw new Error('Failed to authenticate with backend. Please try logging in again.');
+        }
+        
         sourceLabel = 'backend';
         fetchedData = await backend.fetchData();
       } else {
