@@ -61,10 +61,16 @@ export const MagicLinkAuthProvider = ({ children }) => {
         try {
           const persisted = JSON.parse(localStorage.getItem('auth_user') || 'null');
           if (persisted && persisted.user && Date.now() < persisted.expiresAt) {
-            console.log('MagicLinkAuthProvider: Found persisted user session');
-            setUser(persisted.user);
-            setAuthState('authenticated');
-            return;
+            // Validate that the persisted user has all required properties
+            if (persisted.user.isAdmin !== undefined && persisted.user.name && persisted.user.email) {
+              console.log('MagicLinkAuthProvider: Found valid persisted user session');
+              setUser(persisted.user);
+              setAuthState('authenticated');
+              return;
+            } else {
+              console.log('MagicLinkAuthProvider: Persisted user data incomplete, clearing...');
+              localStorage.removeItem('auth_user');
+            }
           }
         } catch (_) {}
 
@@ -72,10 +78,27 @@ export const MagicLinkAuthProvider = ({ children }) => {
         if (isMagicLinkAuthenticated()) {
           console.log('MagicLinkAuthProvider: User is authenticated via magic link, getting user data...');
           const currentUser = getMagicLinkUser();
-          if (currentUser) {
-            console.log('MagicLinkAuthProvider: User data found:', currentUser);
-            setUser(currentUser);
-            setAuthState('authenticated');
+          if (currentUser && currentUser.email) {
+            // Enrich with team member data (incl. isAdmin)
+            const member = TEAM_MEMBERS.find(m => m.email.toLowerCase() === currentUser.email.toLowerCase());
+            if (member) {
+              const enrichedUser = {
+                id: member.id,
+                name: member.name,
+                email: member.email,
+                role: member.role,
+                isAdmin: member.isAdmin
+              };
+              console.log('MagicLinkAuthProvider: Enriched user from team member list:', enrichedUser);
+              setUser(enrichedUser);
+              setAuthState('authenticated');
+              return;
+            } else {
+              console.log('MagicLinkAuthProvider: Authenticated email not in TEAM_MEMBERS, clearing...');
+              clearMagicLinkData();
+              setAuthState('unauthenticated');
+              return;
+            }
           } else {
             console.log('MagicLinkAuthProvider: User data invalid, clearing...');
             // Clear invalid data
@@ -193,6 +216,10 @@ export const MagicLinkAuthProvider = ({ children }) => {
         isAdmin: teamMember.isAdmin
       };
       
+      console.log('Created user info:', userInfo);
+      console.log('Team member found:', teamMember);
+      console.log('isAdmin value:', teamMember.isAdmin);
+      
       // Update state
       setUser(userInfo);
       setAuthState('authenticated');
@@ -235,8 +262,8 @@ export const MagicLinkAuthProvider = ({ children }) => {
   // Check if user has specific role or permission
   const hasRole = useCallback((role) => {
     if (!user) return false;
-    // Check if the user is an admin based on email domain
-    return user.email && user.email.endsWith('@zenoti.com');
+    // Check if the user is an admin based on isAdmin property
+    return user.isAdmin === true;
   }, [user]);
 
   // Check if user has specific permission

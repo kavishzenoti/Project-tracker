@@ -58,6 +58,7 @@ const ChangeLogModal = ({
       case 'task_reordered': return <History className="w-4 h-4 text-purple-600" />;
       case 'assignment': return <Users className="w-4 h-4 text-purple-600" />;
       case 'status_change': return <CheckCircle2 className="w-4 h-4 text-orange-600" />;
+      case 'cell_cleared': return <X className="w-4 h-4 text-red-600" />;
       default: return <Circle className="w-4 h-4 text-gray-600" />;
     }
   };
@@ -145,6 +146,7 @@ const ChangeLogModal = ({
               <option value="task_reordered">Task Reordered</option>
               <option value="assignment">Assignment</option>
               <option value="status_change">Status Change</option>
+              <option value="cell_cleared">Cell Cleared</option>
             </select>
           </div>
         </div>
@@ -342,6 +344,15 @@ const DesignSystemTracker = () => {
   // Get authentication context
   const { user: currentUser, logout: handleLogout } = useMagicLinkAuth();
 
+  // Debug logging for user object
+  useEffect(() => {
+    if (currentUser) {
+      console.log('Current user in DesignSystemTracker:', currentUser);
+      console.log('isAdmin value:', currentUser.isAdmin);
+      console.log('User email:', currentUser.email);
+    }
+  }, [currentUser]);
+
   // Local storage keys
   const STORAGE_KEYS = {
     TASKS: 'design_tracker_tasks',
@@ -516,8 +527,8 @@ const DesignSystemTracker = () => {
       return;
     } else {
       // Non-admin users are automatically assigned to cells they interact with
-      if (currentData.assignee !== currentUser.name) {
-        updateCellData(taskId, weekId, 'assignee', currentUser.name);
+    if (currentData.assignee !== currentUser.name) {
+      updateCellData(taskId, weekId, 'assignee', currentUser.name);
       }
     }
   };
@@ -546,7 +557,7 @@ const DesignSystemTracker = () => {
         logChange('logout', `User ${currentUser.name} logged out`);
         
         // Clear user's personal selections
-        setSelectedCells(new Set());
+    setSelectedCells(new Set());
         setLastClickedCell(null);
         
         console.log('User data cleared on logout');
@@ -756,6 +767,18 @@ const DesignSystemTracker = () => {
       const [taskId, weekId] = cellKey.split('-').map(Number);
       if (field === 'remove') {
         const key = getCellKey(taskId, weekId);
+        const currentData = cellData[key];
+        
+        // Only mark as uncommitted if there was actual data to remove
+        if (currentData && (currentData.assignee || currentData.status)) {
+          setHasUncommittedChanges(true);
+          
+          // Log the removal
+          const task = tasks.find(t => t.id === taskId);
+          const week = weeks.find(w => w.id === weekId);
+          logChange('cell_cleared', `Cleared ${task.name} for ${week.label}`, taskId, weekId);
+        }
+        
         setCellData(prev => {
           const newData = { ...prev };
           delete newData[key];
@@ -818,7 +841,7 @@ const DesignSystemTracker = () => {
       });
     });
   };
-  
+
   const getPreviewRangeCells = () => {
     if (!isShiftPressed || !hoveredCell || !lastClickedCell) {
       return new Set();
@@ -968,39 +991,39 @@ const DesignSystemTracker = () => {
         {currentUser && (
           <>
             {currentUser.isAdmin ? (
-              // Admin users can assign to anyone
-              <>
-                {teamMembers.map(member => (
-                  <button
-                    key={member.id}
-                    className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded"
-                    onClick={() => applyToSelectedCells('assignee', member.name)}
-                  >
-                    {member.name}
-                  </button>
-                ))}
-                <button
-                  className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
-                  onClick={() => applyToSelectedCells('assignee', '')}
-                >
-                  Unassign
-                </button>
-              </>
-            ) : (
-              // Non-admin users can only assign to themselves
-              <>
-                <button
-                  className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded bg-blue-50"
-                  onClick={() => applyToSelectedCells('assignee', currentUser.name)}
-                >
-                  {currentUser.name} (You)
-                </button>
-                <button
-                  className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
-                  onClick={() => applyToSelectedCells('assignee', '')}
-                >
-                  Unassign
-                </button>
+          // Admin users can assign to anyone
+          <>
+            {teamMembers.map(member => (
+              <button
+                key={member.id}
+                className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded"
+                onClick={() => applyToSelectedCells('assignee', member.name)}
+              >
+                {member.name}
+              </button>
+            ))}
+            <button
+              className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
+              onClick={() => applyToSelectedCells('assignee', '')}
+            >
+              Unassign
+            </button>
+          </>
+        ) : (
+          // Non-admin users can only assign to themselves
+          <>
+            <button
+              className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded bg-blue-50"
+              onClick={() => applyToSelectedCells('assignee', currentUser.name)}
+            >
+              {currentUser.name} (You)
+            </button>
+            <button
+              className="w-full text-left px-2 py-1 text-sm hover:bg-red-50 rounded text-red-600"
+              onClick={() => applyToSelectedCells('assignee', '')}
+            >
+              Unassign
+            </button>
               </>
             )}
           </>
@@ -1037,6 +1060,44 @@ const DesignSystemTracker = () => {
     </div>
   );
 
+  // Function to update task delivery date (admin only)
+  const updateTaskDeliveryDate = (taskId, deliveryDate) => {
+    if (!currentUser?.isAdmin) return;
+    
+    setTasks(prev => prev.map(task => {
+      if (task.id !== taskId) return task;
+      const previous = task.deliveryDate || '';
+      const next = deliveryDate || '';
+      if (previous !== next) {
+        const taskName = task.name;
+        const label = next ? `Set delivery date for ${taskName} to ${formatDateHuman(next)}` : `Cleared delivery date for ${taskName}`;
+        logChange('task_edited', label, taskId);
+        setHasUncommittedChanges(true);
+      }
+      return { ...task, deliveryDate: next };
+    }));
+  };
+
+  // Helper function to format date for human reading
+  const formatDateHuman = (value) => {
+    if (!value) return '';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // Helper function to format date for input field
+  const formatDateForInput = (value) => {
+    if (!value) return '';
+    // If already YYYY-MM-DD, return as is
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return '';
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
 
 
   return (
@@ -1069,7 +1130,15 @@ const DesignSystemTracker = () => {
                 </button>
                 {lastCommitTime && (
                   <div className="text-xs text-gray-500 px-2">
-                    Last commit: {new Date(lastCommitTime).toLocaleString()}
+                    Last commit: {new Date(lastCommitTime).toLocaleDateString('en-US', { 
+                      weekday: 'short', 
+                      day: '2-digit', 
+                      month: 'short' 
+                    })}, {new Date(lastCommitTime).toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit',
+                      hour12: true 
+                    })}
                   </div>
                 )}
                 <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-lg">
@@ -1081,7 +1150,7 @@ const DesignSystemTracker = () => {
                         className="w-8 h-8 rounded-full object-cover"
                       />
                     ) : (
-                      <User className="w-4 h-4 text-blue-600" />
+                    <User className="w-4 h-4 text-blue-600" />
                     )}
                   </div>
                   <div className="text-sm">
@@ -1214,12 +1283,12 @@ const DesignSystemTracker = () => {
                   </div>
                 </div>
                 <div className="border-t border-gray-200 pt-3 mt-3">
-                                  <div className="text-xs font-medium text-gray-700 mb-2">Role-Based Permissions:</div>
-                <div className="text-xs text-gray-600 space-y-1">
+                  <div className="text-xs font-medium text-gray-700 mb-2">Role-Based Permissions:</div>
+                  <div className="text-xs text-gray-600 space-y-1">
                   <div>• <strong>Admin Users (@zenoti.com):</strong> Can assign anyone to any task</div>
-                  <div>• <strong>Regular Users:</strong> Automatically assigned to cells they interact with</div>
-                  <div>• <strong>All Users:</strong> Can view change log and manage their own assignments</div>
-                </div>
+                    <div>• <strong>Regular Users:</strong> Automatically assigned to cells they interact with</div>
+                    <div>• <strong>All Users:</strong> Can view change log and manage their own assignments</div>
+                  </div>
                 </div>
               </div>
             )}
@@ -1259,8 +1328,8 @@ const DesignSystemTracker = () => {
                       <tr>
                         <td colSpan={weeks.length + 1}>
                           <div className="h-6"></div>
-                        </td>
-                      </tr>
+                      </td>
+                    </tr>
                     )}
                     {/* Category container */}
                     <tr>
@@ -1279,27 +1348,27 @@ const DesignSystemTracker = () => {
                               </svg>
                             </div>
                           </button>
-
-                          {/* Add task input row */}
+                    
+                    {/* Add task input row */}
                           <div className="px-2 pt-2 pb-0 mb-2">
                             <div className="responsive-task-input sticky left-0 z-10 bg-white pr-2">
                               <div className="input-container">
-                                <input
-                                  type="text"
-                                  placeholder={`Add new task in ${category}...`}
+                          <input
+                            type="text"
+                            placeholder={`Add new task in ${category}...`}
                                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                  value={newTaskInputs[category] || ""}
-                                  onChange={(e) => handleNewTaskInputChange(category, e.target.value)}
-                                  onKeyPress={(e) => handleNewTaskKeyPress(category, e)}
-                                />
+                            value={newTaskInputs[category] || ""}
+                            onChange={(e) => handleNewTaskInputChange(category, e.target.value)}
+                            onKeyPress={(e) => handleNewTaskKeyPress(category, e)}
+                          />
                               </div>
-                              <button
-                                onClick={() => addNewTask(category)}
+                          <button
+                            onClick={() => addNewTask(category)}
                                 className="px-3 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors min-w-[72px]"
-                                disabled={!newTaskInputs[category]?.trim()}
-                              >
-                                <span>Add</span>
-                              </button>
+                            disabled={!newTaskInputs[category]?.trim()}
+                          >
+                            <span>Add</span>
+                          </button>
                             </div>
                           </div>
 
@@ -1416,6 +1485,22 @@ const DesignSystemTracker = () => {
                                         </option>
                                       ))}
                                     </select>
+                                  </div>
+                                  
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-500">Delivery Date:</span>
+                                    {currentUser?.isAdmin ? (
+                                      <input
+                                        type="date"
+                                        className="text-xs p-1 border rounded bg-white"
+                                        value={formatDateForInput(task.deliveryDate)}
+                                        onChange={(e) => updateTaskDeliveryDate(task.id, e.target.value)}
+                                      />
+                                    ) : (
+                                      <span className="text-xs text-gray-700">
+                                        {task.deliveryDate ? formatDateHuman(task.deliveryDate) : '—'}
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                                 
