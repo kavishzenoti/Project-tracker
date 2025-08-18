@@ -2,8 +2,8 @@
 export const BACKEND_CONFIG = {
   // Backend API base URL
   BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'https://your-production-backend.com/api'  // Replace with your actual production backend
-    : 'http://localhost:3001/api',               // Local development backend
+    ? 'https://project-tracker-backend-rejs.onrender.com/api'  // Replace with your actual Render backend URL
+    : 'http://localhost:3001/api',                        // Local development backend
   
   // API endpoints
   ENDPOINTS: {
