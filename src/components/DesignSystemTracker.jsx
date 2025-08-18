@@ -555,8 +555,45 @@ const DesignSystemTracker = () => {
       if (isBackendProxyEnabled()) {
         const backend = new BackendProxy();
         
-        // First authenticate with backend using current user's email
+        // First check if backend is healthy
         try {
+          if (abortController.signal.aborted) throw new Error('Sync cancelled');
+          
+          // Update button to show health check step
+          if (syncButton) {
+            syncButton.innerHTML = `
+              <div class="flex items-center gap-2">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Checking backend...</span>
+                <button 
+                  onclick="window.cancelCurrentSync()" 
+                  class="ml-2 px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded"
+                  title="Cancel sync"
+                >
+                  ✕
+                </button>
+              </div>
+            `;
+          }
+          
+          // Simple ping test first
+          try {
+            const pingResponse = await fetch('https://project-tracker-backend-rejs.onrender.com/api/health', {
+              method: 'GET',
+              signal: abortController.signal
+            });
+            console.log('✅ Backend ping successful:', pingResponse.status);
+          } catch (pingError) {
+            console.error('❌ Backend ping failed:', pingError);
+            throw new Error('Cannot reach backend. Please check the URL or if the service is running.');
+          }
+          
+          const isHealthy = await backend.checkBackendHealth();
+          if (!isHealthy) {
+            throw new Error('Backend is not responding. Please check if it\'s running.');
+          }
+          console.log('✅ Backend is healthy');
+          
           if (abortController.signal.aborted) throw new Error('Sync cancelled');
           
           // Update button to show authentication step
