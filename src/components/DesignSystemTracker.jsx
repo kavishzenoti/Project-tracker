@@ -578,11 +578,20 @@ const DesignSystemTracker = () => {
           
           // Simple ping test first
           try {
+            console.log('🔍 Testing backend connectivity...');
             const pingResponse = await fetch('https://project-tracker-backend-rejs.onrender.com/api/health', {
               method: 'GET',
               signal: abortController.signal
             });
             console.log('✅ Backend ping successful:', pingResponse.status);
+            
+            if (!pingResponse.ok) {
+              throw new Error(`Backend responded with status: ${pingResponse.status}`);
+            }
+            
+            const healthData = await pingResponse.json();
+            console.log('✅ Backend health data:', healthData);
+            
           } catch (pingError) {
             console.error('❌ Backend ping failed:', pingError);
             throw new Error('Cannot reach backend. Please check the URL or if the service is running.');
@@ -613,6 +622,7 @@ const DesignSystemTracker = () => {
             `;
           }
           
+          console.log('🔐 Starting authentication with email:', currentUser.email);
           await backend.authenticateUser(currentUser.email);
           console.log('✅ Authenticated with backend');
           
