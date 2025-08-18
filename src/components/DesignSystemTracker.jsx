@@ -632,6 +632,15 @@ const DesignSystemTracker = () => {
     setTasks(prev => prev.map(task => 
       task.id === taskId ? { ...task, priority } : task
     ));
+    
+    // Mark as having uncommitted changes
+    setHasUncommittedChanges(true);
+    
+    // Log the priority change
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      logChange('task_edited', `Changed priority of "${task.name}" to ${priority}`, taskId);
+    }
   };
 
   const getCellKey = (taskId, weekId) => `${taskId}-${weekId}`;
@@ -807,6 +816,9 @@ const DesignSystemTracker = () => {
     setTasks(prev => [...prev, newTask]);
     setNewTaskInputs(prev => ({ ...prev, [category]: "" }));
     
+    // Mark as having uncommitted changes
+    setHasUncommittedChanges(true);
+    
     // Log task creation
     logChange('task_created', `Created new task: ${taskName} in ${category}`, newId);
   };
@@ -886,9 +898,10 @@ const DesignSystemTracker = () => {
         t.id === editingTask ? { ...t, name: editingTaskName.trim() } : t
       ));
       
-      // Log task name change
+      // Log task name change and mark as uncommitted
       if (oldName !== editingTaskName.trim()) {
         logChange('task_edited', `Changed task name from "${oldName}" to "${editingTaskName.trim()}"`, editingTask);
+        setHasUncommittedChanges(true);
       }
     }
     setEditingTask(null);
@@ -947,9 +960,9 @@ const DesignSystemTracker = () => {
 
     // Reorder tasks within the category
     setTasks(prevTasks => {
-      const categoryTasks = prevTasks.filter(t => t.category === draggedTask.category);
-      const draggedIndex = categoryTasks.findIndex(t => t.id === draggedTask.id);
-      const targetIndex = categoryTasks.findIndex(t => t.id === targetTask.id);
+      // Find indices in the full tasks array
+      const draggedIndex = prevTasks.findIndex(t => t.id === draggedTask.id);
+      const targetIndex = prevTasks.findIndex(t => t.id === targetTask.id);
       
       if (draggedIndex === -1 || targetIndex === -1) return prevTasks;
       
@@ -962,6 +975,9 @@ const DesignSystemTracker = () => {
       
       // Log the reordering
       logChange('task_reordered', `Task "${draggedTask.name}" reordered within ${draggedTask.category}`, draggedTask.id);
+      
+      // Mark as having uncommitted changes
+      setHasUncommittedChanges(true);
       
       return newTasks;
     });
@@ -1443,7 +1459,17 @@ const DesignSystemTracker = () => {
                                           </svg>
                                         </div>
                                       )}
-                                      <div className="font-medium text-gray-900 text-sm flex-1 min-w-0 truncate" title={task.name} aria-label={task.name}>
+                                      <div className="font-medium text-gray-900 text-sm flex-1 min-w-0 leading-tight" 
+                                           style={{ 
+                                             display: '-webkit-box',
+                                             WebkitLineClamp: 2,
+                                             WebkitBoxOrient: 'vertical',
+                                             overflow: 'hidden',
+                                             lineHeight: '1.2',
+                                             maxHeight: '2.4em'
+                                           }}
+                                           title={task.name} 
+                                           aria-label={task.name}>
                                         {task.name}
                                       </div>
                                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
