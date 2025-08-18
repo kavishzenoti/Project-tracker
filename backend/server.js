@@ -66,14 +66,16 @@ app.use(express.json());
 app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
+  resave: true, // Changed to true to ensure session is saved
   saveUninitialized: false,
   cookie: { 
     secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS !== 'false',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax' // Allow cross-site requests
-  }
+    sameSite: 'lax', // Allow cross-site requests
+    path: '/api' // Ensure cookie is available for API endpoints
+  },
+  name: 'project-tracker-session' // Custom session name
 }));
 
 // Health check endpoint
@@ -135,16 +137,21 @@ app.post('/api/auth/login', (req, res) => {
   
   // Store user in session
   req.session.user = { email, isAuthenticated: true };
-  
-  // Force session save
+
+  // Force session save and wait for it to complete
   req.session.save((err) => {
     if (err) {
       console.error('❌ Session save error:', err);
       return res.status(500).json({ error: 'Failed to create session' });
     }
     
+    // Verify session was saved
     console.log('✅ Session created for:', email);
-    console.log('🔑 Session data:', req.session);
+    console.log('🔑 Session data after save:', req.session);
+    console.log('🔑 Session ID after save:', req.sessionID);
+    
+    // Set a test flag to verify session persistence
+    req.session.testFlag = 'session-working';
     
     res.json({ 
       success: true, 
