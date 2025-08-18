@@ -249,9 +249,19 @@ app.post('/api/github/commit', async (req, res) => {
 
 app.get('/api/github/fetch', async (req, res) => {
   try {
+    console.log('🔍 GitHub fetch request - Session ID:', req.sessionID);
+    console.log('🔍 GitHub fetch request - Session data:', req.session);
+    console.log('🔍 GitHub fetch request - Cookies:', req.headers.cookie);
+    console.log('🔍 GitHub fetch request - User agent:', req.headers['user-agent']);
+    
     if (!req.session.user || !req.session.user.isAuthenticated) {
+      console.log('❌ GitHub fetch - Session not authenticated');
+      console.log('❌ Session user:', req.session.user);
+      console.log('❌ Session authenticated:', req.session.user?.isAuthenticated);
       return res.status(401).json({ error: 'Not authenticated' });
     }
+    
+    console.log('✅ GitHub fetch - User authenticated:', req.session.user.email);
     
     // Fetch data from GitHub
     const { data: fileData } = await octokit.repos.getContent({
@@ -264,14 +274,16 @@ app.get('/api/github/fetch', async (req, res) => {
     // Decode content
     const content = JSON.parse(Buffer.from(fileData.content, 'base64').toString());
     
+    console.log('✅ GitHub fetch - Data retrieved successfully');
     res.json(content);
     
   } catch (error) {
     if (error.status === 404) {
+      console.log('⚠️ GitHub fetch - No data found (404)');
       return res.status(404).json({ error: 'No data found' });
     }
     
-    console.error('GitHub fetch error:', error);
+    console.error('❌ GitHub fetch error:', error);
     res.status(500).json({ 
       error: 'Failed to fetch data',
       details: error.message 
