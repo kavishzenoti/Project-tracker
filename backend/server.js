@@ -61,7 +61,8 @@ app.use(cors({
   ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  exposedHeaders: ['Set-Cookie']
 }));
 
 app.use(express.json());
@@ -75,7 +76,8 @@ app.use(session({
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: 'lax', // Allow cross-site requests
-    path: '/api' // Ensure cookie is available for API endpoints
+    path: '/', // Allow cookie across entire domain
+    domain: process.env.COOKIE_DOMAIN || (process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined) // Configurable domain
   },
   name: 'project-tracker-session' // Custom session name
 }));
