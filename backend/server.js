@@ -50,6 +50,9 @@ if (process.env.NODE_ENV === 'production' && process.env.REDIS_URL) {
   console.log('🔧 Using memory store (Redis not configured)');
 }
 
+console.log('🔧 Session store type:', sessionStore ? 'Redis' : 'Memory');
+console.log('🔧 Session store instance:', sessionStore);
+
 // Middleware
 app.use(cors({
   origin: [
@@ -75,7 +78,7 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS !== 'false',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax', // Allow cross-site requests
+    sameSite: 'none', // Allow cross-site requests
     path: '/', // Allow cookie across entire domain
     domain: process.env.COOKIE_DOMAIN || (process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined) // Configurable domain
   },
@@ -105,6 +108,38 @@ app.get('/api/debug/session', (req, res) => {
     cookies: req.headers.cookie,
     userAgent: req.headers['user-agent'],
     timestamp: new Date().toISOString()
+  });
+});
+
+// Test endpoint to manually create a session
+app.get('/api/test-session', (req, res) => {
+  console.log('🧪 Test session endpoint called');
+  console.log('🧪 Current session ID:', req.sessionID);
+  console.log('🧪 Current session data:', req.session);
+  
+  // Create a test session
+  req.session.testUser = { 
+    email: 'test@example.com', 
+    timestamp: new Date().toISOString() 
+  };
+  
+  req.session.save((err) => {
+    if (err) {
+      console.error('❌ Test session save error:', err);
+      return res.status(500).json({ error: 'Failed to save test session' });
+    }
+    
+    console.log('✅ Test session saved successfully');
+    console.log('✅ Session ID:', req.sessionID);
+    console.log('✅ Session data:', req.session);
+    console.log('📋 Response headers:', res.getHeaders());
+    
+    res.json({ 
+      success: true, 
+      sessionId: req.sessionID,
+      sessionData: req.session,
+      message: 'Test session created'
+    });
   });
 });
 
@@ -153,15 +188,22 @@ app.post('/api/auth/login', (req, res) => {
     console.log('✅ Session created for:', email);
     console.log('🔑 Session data after save:', req.session);
     console.log('🔑 Session ID after save:', req.sessionID);
+    console.log('🍪 Session cookie should be set with ID:', req.sessionID);
     
     // Set a test flag to verify session persistence
     req.session.testFlag = 'session-working';
+    
+    // Log response headers to see if Set-Cookie is present
+    console.log('📋 Response headers before sending:', res.getHeaders());
     
     res.json({ 
       success: true, 
       user: { email },
       sessionId: req.sessionID 
     });
+    
+    // Log after response is sent
+    console.log('📤 Response sent. Check if Set-Cookie header was set.');
   });
 });
 
