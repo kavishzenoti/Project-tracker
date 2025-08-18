@@ -20,6 +20,32 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN
 });
 
+// Session store configuration
+let sessionStore;
+if (process.env.NODE_ENV === 'production') {
+  try {
+    // Use Redis in production
+    const RedisStore = require('connect-redis').default;
+    const redis = require('redis');
+    
+    const redisClient = redis.createClient({
+      url: process.env.REDIS_URL || 'redis://localhost:6379'
+    });
+    
+    redisClient.connect().catch(console.error);
+    
+    sessionStore = new RedisStore({ client: redisClient });
+    console.log('✅ Using Redis for session storage');
+  } catch (error) {
+    console.warn('⚠️ Redis not available, falling back to memory store:', error.message);
+    sessionStore = undefined;
+  }
+} else {
+  // Use memory store in development
+  sessionStore = undefined;
+  console.log('🔧 Using memory store for development');
+}
+
 // Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -28,6 +54,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(session({
+  store: sessionStore,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
