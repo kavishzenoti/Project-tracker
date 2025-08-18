@@ -7,6 +7,7 @@ export const BACKEND_CONFIG = {
   
   // API endpoints
   ENDPOINTS: {
+    HEALTH: '/health',
     AUTH: {
       STATUS: '/auth/status',
       LOGIN: '/auth/login',
