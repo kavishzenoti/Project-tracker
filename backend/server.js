@@ -43,8 +43,14 @@ if (process.env.NODE_ENV === 'production' && process.env.REDIS_URL) {
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: [
+    process.env.FRONTEND_URL,
+    'https://kavishzenoti.github.io',
+    'http://localhost:3000'
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -64,6 +70,16 @@ app.use(session({
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'Backend is working!',
+    timestamp: new Date().toISOString(),
+    sessionId: req.sessionID,
+    hasSession: !!req.session
+  });
 });
 
 // Debug endpoint for session troubleshooting
