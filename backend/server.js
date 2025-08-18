@@ -16,9 +16,18 @@ const GITHUB_CONFIG = {
 };
 
 // Initialize GitHub client with token from environment
+if (!process.env.GITHUB_TOKEN) {
+  console.error('❌ GITHUB_TOKEN environment variable is not set!');
+  console.error('❌ GitHub operations will fail. Please set GITHUB_TOKEN in Render environment variables.');
+}
+
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN
+  auth: process.env.GITHUB_TOKEN || 'no-token-set'
 });
+
+// Log GitHub configuration
+console.log('🔧 GitHub integration configured for:', GITHUB_CONFIG.REPO_OWNER, '/', GITHUB_CONFIG.REPO_NAME);
+console.log('🔑 GitHub token available:', !!process.env.GITHUB_TOKEN);
 
 // Session store configuration
 let sessionStore;
@@ -89,6 +98,18 @@ app.get('/api/debug/session', (req, res) => {
     sessionData: req.session,
     cookies: req.headers.cookie,
     userAgent: req.headers['user-agent'],
+    timestamp: new Date().toISOString()
+  });
+});
+
+// GitHub token check endpoint
+app.get('/api/debug/github', (req, res) => {
+  res.json({
+    hasToken: !!process.env.GITHUB_TOKEN,
+    tokenLength: process.env.GITHUB_TOKEN ? process.env.GITHUB_TOKEN.length : 0,
+    repoOwner: GITHUB_CONFIG.REPO_OWNER,
+    repoName: GITHUB_CONFIG.REPO_NAME,
+    dataPath: GITHUB_CONFIG.DATA_FILE_PATH,
     timestamp: new Date().toISOString()
   });
 });
