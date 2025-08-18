@@ -22,18 +22,14 @@ const octokit = new Octokit({
 
 // Session store configuration
 let sessionStore;
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && process.env.REDIS_URL) {
   try {
-    // Use Redis in production
     const RedisStore = require('connect-redis').default;
     const redis = require('redis');
-    
     const redisClient = redis.createClient({
-      url: process.env.REDIS_URL || 'redis://localhost:6379'
+      url: process.env.REDIS_URL
     });
-    
     redisClient.connect().catch(console.error);
-    
     sessionStore = new RedisStore({ client: redisClient });
     console.log('✅ Using Redis for session storage');
   } catch (error) {
@@ -41,9 +37,8 @@ if (process.env.NODE_ENV === 'production') {
     sessionStore = undefined;
   }
 } else {
-  // Use memory store in development
   sessionStore = undefined;
-  console.log('🔧 Using memory store for development');
+  console.log('🔧 Using memory store (Redis not configured)');
 }
 
 // Middleware
