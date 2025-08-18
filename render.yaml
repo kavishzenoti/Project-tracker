@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: project-tracker-backend
+    env: node
+    plan: free
+    sourceDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        value: https://kavishzenoti.github.io
+      - key: TEAM_MEMBERS
+        value: kavisht@zenoti.com,user2@zenoti.com
+      - key: ADMIN_EMAILS
+        value: kavisht@zenoti.com

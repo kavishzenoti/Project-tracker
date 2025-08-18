@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, Users, CheckCircle2, Circle, Clock, AlertCircle, PauseCircle, Edit3, X, Trash2, Check, User, LogOut, History, Filter } from 'lucide-react';
+import { Calendar, Users, CheckCircle2, Circle, Clock, AlertCircle, PauseCircle, Edit3, X, Trash2, Check, User, LogOut, History, Filter, ChevronDown, ChevronRight } from 'lucide-react';
 import { useMagicLinkAuth } from '../contexts/MagicLinkAuthContext.jsx';
+import GitHubAPI from '../utils/githubApi.js';
+import { GITHUB_CONFIG } from '../config/github.js';
+import BackendProxy from '../utils/backendProxy.js';
+import { isBackendProxyEnabled } from '../config/backend.js';
 
 // Style Tokens: central place to manage colors and sizing
 const STYLE_TOKENS = {
@@ -59,6 +63,8 @@ const ChangeLogModal = ({
       case 'assignment': return <Users className="w-4 h-4 text-purple-600" />;
       case 'status_change': return <CheckCircle2 className="w-4 h-4 text-orange-600" />;
       case 'cell_cleared': return <X className="w-4 h-4 text-red-600" />;
+      case 'commit': return <Check className="w-4 h-4 text-green-600" />;
+      case 'sync': return <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>;
       default: return <Circle className="w-4 h-4 text-gray-600" />;
     }
   };
@@ -147,6 +153,8 @@ const ChangeLogModal = ({
               <option value="assignment">Assignment</option>
               <option value="status_change">Status Change</option>
               <option value="cell_cleared">Cell Cleared</option>
+              <option value="commit">Commit</option>
+              <option value="sync">Sync</option>
             </select>
           </div>
         </div>
@@ -338,6 +346,8 @@ const DesignSystemTracker = () => {
   // Commit state for tracking uncommitted changes
   const [hasUncommittedChanges, setHasUncommittedChanges] = useState(false);
   const [lastCommitTime, setLastCommitTime] = useState(null);
+  const [githubTokenInput, setGithubTokenInput] = useState('');
+  const [isTokenValid, setIsTokenValid] = useState(false);
   
   const contextMenuRef = useRef(null);
   
@@ -456,24 +466,146 @@ const DesignSystemTracker = () => {
   };
 
   // Function to commit changes and share with other users
-  const commitChanges = () => {
+  const commitChanges = async () => {
     try {
-      // In a real implementation, this would send data to a server
-      // For now, we'll simulate sharing by updating the commit timestamp
+      // Prepare data to commit
+      const dataToCommit = {
+        tasks,
+        cellData,
+        changeLog,
+        lastUpdated: new Date().toISOString(),
+        committedBy: currentUser.name,
+        version: '1.0.0'
+      };
+
+      if (isBackendProxyEnabled()) {
+        // Use secure backend proxy
+        const backend = new BackendProxy();
+        await backend.commitData(dataToCommit, `Update by ${currentUser.name}`);
+      } else {
+        // Direct GitHub flow requires user token
+        if (!currentUser.githubToken) {
+          alert('GitHub token not found. Please add your GitHub Personal Access Token in the settings.');
+          return;
+        }
+        const githubApi = new GitHubAPI(currentUser.githubToken);
+        await githubApi.checkAccess();
+        const commitMessage = GITHUB_CONFIG.COMMIT_MESSAGES.USER_UPDATE(currentUser.name);
+        await githubApi.commitData(dataToCommit, commitMessage);
+      }
+
+      // Update the commit timestamp
       setLastCommitTime(new Date().toISOString());
       setHasUncommittedChanges(false);
-      
-      // Log the commit
-      logChange('commit', `User ${currentUser.name} committed changes to the project`);
-      
-      // Show success message
-      alert('Changes committed successfully! Other users will see your updates.');
-      
-      console.log('Changes committed and shared with other users');
+      logChange('commit', `User ${currentUser.name} committed changes${isBackendProxyEnabled() ? ' via backend' : ' to GitHub'}`);
+      alert('Changes committed successfully! Other users can now sync to see your updates.');
     } catch (error) {
       console.error('Error committing changes:', error);
-      alert('Failed to commit changes. Please try again.');
+      let errorMessage = 'Failed to commit changes. ' + (error.message || '');
+      alert(errorMessage);
     }
+  };
+
+  // Function to sync data from GitHub
+  const syncFromGitHub = async () => {
+    try {
+      const syncButton = document.querySelector('[data-sync-button]');
+      if (syncButton) {
+        syncButton.disabled = true;
+        syncButton.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div> Syncing...';
+      }
+
+      let fetchedData = null;
+      let sourceLabel = '';
+
+      if (isBackendProxyEnabled()) {
+        const backend = new BackendProxy();
+        sourceLabel = 'backend';
+        fetchedData = await backend.fetchData();
+      } else {
+        const hasToken = Boolean(currentUser?.githubToken);
+        if (hasToken) {
+          const githubApi = new GitHubAPI(currentUser.githubToken);
+          await githubApi.checkAccess();
+          sourceLabel = 'GitHub (auth)';
+          fetchedData = await githubApi.fetchData();
+        } else {
+          // Public fetch (no token required)
+          sourceLabel = 'GitHub (public)';
+          const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.REPO_OWNER}/${GITHUB_CONFIG.REPO_NAME}/${GITHUB_CONFIG.DATA_BRANCH}/${GITHUB_CONFIG.DATA_FILE_PATH}`;
+          const resp = await fetch(rawUrl, { cache: 'no-cache' });
+          if (resp.status === 404) {
+            fetchedData = null;
+          } else if (!resp.ok) {
+            throw new Error(`Failed to fetch data publicly: ${resp.status}`);
+          } else {
+            fetchedData = await resp.json();
+          }
+        }
+      }
+
+      if (fetchedData) {
+        const currentLastUpdated = localStorage.getItem('last_updated') || '0';
+        const fetchedLastUpdated = fetchedData.lastUpdated || '0';
+        if (new Date(fetchedLastUpdated) > new Date(currentLastUpdated)) {
+          const mergedData = mergeData(fetchedData);
+          setTasks(mergedData.tasks);
+          setCellData(mergedData.cellData);
+          setChangeLog(mergedData.changeLog);
+          localStorage.setItem(STORAGE_KEYS.tasks, JSON.stringify(mergedData.tasks));
+          localStorage.setItem(STORAGE_KEYS.cellData, JSON.stringify(mergedData.cellData));
+          localStorage.setItem(STORAGE_KEYS.changeLog, JSON.stringify(mergedData.changeLog));
+          localStorage.setItem('last_updated', fetchedLastUpdated);
+          alert('New data found! Synced successfully.');
+          logChange('sync', `User ${currentUser.name} synced latest data from ${sourceLabel}`);
+        } else {
+          alert('Already up to date! No new data to sync.');
+        }
+      } else {
+        alert('No shared data found yet.');
+      }
+    } catch (error) {
+      console.error('Error syncing:', error);
+      alert('Failed to sync. ' + (error.message || ''));
+    } finally {
+      const syncButton = document.querySelector('[data-sync-button]');
+      if (syncButton) {
+        syncButton.disabled = false;
+        if (hasUncommittedChanges) {
+          syncButton.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 6L9 17l-5-5" /></svg> Sync (Commit Changes)';
+        } else {
+          syncButton.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Sync';
+        }
+      }
+    }
+  };
+
+  // Function to merge fetched data with current data
+  const mergeData = (fetchedData) => {
+    // Merge tasks (new tasks get added, existing ones get updated)
+    const mergedTasks = [...tasks];
+    fetchedData.tasks.forEach(fetchedTask => {
+      const existingIndex = mergedTasks.findIndex(task => task.id === fetchedTask.id);
+      if (existingIndex >= 0) {
+        // Update existing task
+        mergedTasks[existingIndex] = { ...mergedTasks[existingIndex], ...fetchedTask };
+      } else {
+        // Add new task
+        mergedTasks.push(fetchedTask);
+      }
+    });
+
+    // Merge cell data (fetched data takes precedence for conflicts)
+    const mergedCellData = { ...cellData, ...fetchedData.cellData };
+
+    // Merge change log (append new changes)
+    const mergedChangeLog = [...changeLog, ...fetchedData.changeLog];
+
+    return {
+      tasks: mergedTasks,
+      cellData: mergedCellData,
+      changeLog: mergedChangeLog
+    };
   };
 
   const categories = ["Design Roadmap", "Audit", "Maintenance", "Advocacy & Training"];
@@ -1115,6 +1247,42 @@ const DesignSystemTracker = () => {
     return `${y}-${m}-${day}`;
   };
 
+  // Initialize GitHub token input from user data
+  useEffect(() => {
+    if (currentUser?.githubToken) {
+      setGithubTokenInput(currentUser.githubToken);
+      setIsTokenValid(true);
+    }
+  }, [currentUser?.githubToken]);
+
+  // Function to save GitHub token
+  const saveGitHubToken = async () => {
+    try {
+      if (!githubTokenInput.trim()) {
+        alert('Please enter a GitHub token');
+        return;
+      }
+
+      // Test the token by checking repository access
+      const githubApi = new GitHubAPI(githubTokenInput);
+      await githubApi.checkAccess();
+
+      // Token is valid, save it
+      const updatedUser = { ...currentUser, githubToken: githubTokenInput };
+      localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+      setIsTokenValid(true);
+      
+      // Show success message
+      alert('GitHub token saved successfully! You can now commit and sync data.');
+      
+      // Force context update (simple approach)
+      window.location.reload();
+    } catch (error) {
+      console.error('Error validating GitHub token:', error);
+      alert('Invalid GitHub token. Please check your token and repository permissions.');
+      setIsTokenValid(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -1131,19 +1299,74 @@ const DesignSystemTracker = () => {
                   <History className="w-4 h-4" />
                   <span>Change Log</span>
                 </button>
-                <button
-                  onClick={commitChanges}
-                  disabled={!hasUncommittedChanges}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                    hasUncommittedChanges 
-                      ? 'bg-green-600 text-white hover:bg-green-700' 
-                      : 'bg-gray-400 text-white cursor-not-allowed'
-                  }`}
-                  title={hasUncommittedChanges ? "Commit and share your changes with other users" : "No changes to commit"}
-                >
-                  <Check className="w-4 h-4" />
-                  <span>Commit Changes</span>
-                </button>
+                <div className="flex items-center gap-4">
+                  {/* Hide token input when backend proxy is enabled */}
+                  {!isBackendProxyEnabled() && (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="password"
+                        placeholder="GitHub Token"
+                        value={githubTokenInput}
+                        onChange={(e) => setGithubTokenInput(e.target.value)}
+                        className={`px-3 py-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          isTokenValid ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                        }`}
+                        title="Enter your GitHub Personal Access Token to enable data sharing"
+                      />
+                      <button
+                        onClick={saveGitHubToken}
+                        className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        title="Save and validate GitHub token"
+                      >
+                        Save
+                      </button>
+                      <a
+                        href="https://github.com/settings/tokens"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-xs underline"
+                        title="Create a new GitHub Personal Access Token"
+                      >
+                        Get Token
+                      </a>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={async () => {
+                      if (hasUncommittedChanges) {
+                        await commitChanges();
+                      } else {
+                        await syncFromGitHub();
+                      }
+                    }}
+                    data-sync-button
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                      hasUncommittedChanges 
+                        ? 'bg-green-600 text-white hover:bg-green-700' 
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
+                    title={hasUncommittedChanges 
+                      ? "Commit and share your changes with other users" 
+                      : "Sync latest data"
+                    }
+                  >
+                    {hasUncommittedChanges ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>Sync (Commit Changes)</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span>Sync</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                
                 {lastCommitTime && (
                   <div className="text-xs text-gray-500 px-2">
                     Last commit: {new Date(lastCommitTime).toLocaleDateString('en-US', { 
@@ -1283,7 +1506,7 @@ const DesignSystemTracker = () => {
               </div>
             </button>
             {showInstructions && (
-              <div className="text-sm text-gray-600 space-y-2 bg-gray-50 p-3 rounded-lg">
+              <div className="text-sm text-gray-600 space-y-2 p-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <div>• <strong>Click:</strong> Select single cell</div>
