@@ -518,11 +518,35 @@ const DesignSystemTracker = () => {
 
   // Function to sync data from GitHub
   const syncFromGitHub = async () => {
+    // Create abort controller for this sync operation
+    const abortController = new AbortController();
+    
     try {
       const syncButton = document.querySelector('[data-sync-button]');
       if (syncButton) {
         syncButton.disabled = true;
-        syncButton.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div> Syncing...';
+        syncButton.innerHTML = `
+          <div class="flex items-center gap-2">
+            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <span>Syncing...</span>
+            <button 
+              onclick="window.cancelCurrentSync()" 
+              class="ml-2 px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded"
+              title="Cancel sync"
+            >
+              ✕
+            </button>
+          </div>
+        `;
+        
+        // Store abort controller globally so cancel button can access it
+        window.cancelCurrentSync = () => {
+          abortController.abort();
+          syncButton.disabled = false;
+          syncButton.innerHTML = hasUncommittedChanges 
+            ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 6L9 17l-5-5" /></svg> Sync (Commit Changes)'
+            : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Sync';
+        };
       }
 
       let fetchedData = null;
@@ -533,8 +557,47 @@ const DesignSystemTracker = () => {
         
         // First authenticate with backend using current user's email
         try {
+          if (abortController.signal.aborted) throw new Error('Sync cancelled');
+          
+          // Update button to show authentication step
+          if (syncButton) {
+            syncButton.innerHTML = `
+              <div class="flex items-center gap-2">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Authenticating...</span>
+                <button 
+                  onclick="window.cancelCurrentSync()" 
+                  class="ml-2 px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded"
+                  title="Cancel sync"
+                >
+                  ✕
+                </button>
+              </div>
+            `;
+          }
+          
           await backend.authenticateUser(currentUser.email);
           console.log('✅ Authenticated with backend');
+          
+          if (abortController.signal.aborted) throw new Error('Sync cancelled');
+          
+          // Update button to show fetching step
+          if (syncButton) {
+            syncButton.innerHTML = `
+              <div class="flex items-center gap-2">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Fetching data...</span>
+                <button 
+                  onclick="window.cancelCurrentSync()" 
+                  class="ml-2 px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded"
+                  title="Cancel sync"
+                >
+                  ✕
+                </button>
+              </div>
+            `;
+          }
+          
         } catch (authError) {
           console.error('❌ Backend authentication failed:', authError);
           throw new Error('Failed to authenticate with backend. Please try logging in again.');
@@ -585,6 +648,10 @@ const DesignSystemTracker = () => {
         alert('No shared data found yet.');
       }
     } catch (error) {
+      if (error.message === 'Sync cancelled') {
+        console.log('Sync was cancelled by user');
+        return;
+      }
       console.error('Error syncing:', error);
       alert('Failed to sync. ' + (error.message || ''));
     } finally {
@@ -597,6 +664,8 @@ const DesignSystemTracker = () => {
           syncButton.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Sync';
         }
       }
+      // Clean up global cancel function
+      delete window.cancelCurrentSync;
     }
   };
 
