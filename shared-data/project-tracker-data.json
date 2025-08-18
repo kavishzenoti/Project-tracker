@@ -83,9 +83,34 @@
     "1-4": {
       "status": "planned",
       "assignee": "Agam"
+    },
+    "2-0": {
+      "status": "planned"
     }
   },
   "changeLog": [
+    {
+      "id": 1755512393626,
+      "timestamp": "2025-08-18T10:19:53.626Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W1",
+      "taskId": 2,
+      "weekId": 0,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755512026422,
+      "timestamp": "2025-08-18T10:13:46.422Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "commit",
+      "details": "User Kavish committed changes via backend",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
     {
       "id": 1755512018674,
       "timestamp": "2025-08-18T10:13:38.674Z",
@@ -153,7 +178,7 @@
       "taskName": "Build a roadmap of AI Components in the UI"
     }
   ],
-  "lastUpdated": "2025-08-18T10:13:45.381Z",
+  "lastUpdated": "2025-08-18T10:19:58.132Z",
   "committedBy": "Kavish",
   "version": "1.0.0"
 }
