@@ -55,7 +55,9 @@ app.use(cors({
   origin: [
     process.env.FRONTEND_URL,
     'https://kavishzenoti.github.io',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002'
   ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
