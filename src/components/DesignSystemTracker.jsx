@@ -1468,6 +1468,7 @@ const DesignSystemTracker = () => {
                     </div>
                   )}
 
+                  {/* Sync button */}
                   <button
                     onClick={async () => {
                       if (hasUncommittedChanges) {
@@ -1476,30 +1477,49 @@ const DesignSystemTracker = () => {
                         await syncFromGitHub();
                       }
                     }}
+                    disabled={!currentUser}
                     data-sync-button
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      hasUncommittedChanges 
-                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }`}
-                    title={hasUncommittedChanges 
-                      ? "Commit and share your changes with other users" 
-                      : "Sync latest data"
-                    }
+                    className={`px-4 py-2 rounded-lg text-white font-medium transition-colors ${
+                      hasUncommittedChanges
+                        ? 'bg-green-600 hover:bg-green-700'
+                        : 'bg-blue-600 hover:bg-blue-700'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     {hasUncommittedChanges ? (
                       <>
-                        <Check className="w-4 h-4" />
-                        <span>Sync (Commit Changes)</span>
+                        <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 6L9 17l-5-5" />
+                        </svg>
+                        Sync (Commit Changes)
                       </>
                     ) : (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        <span>Sync</span>
+                        Sync
                       </>
                     )}
+                  </button>
+                  
+                  {/* Backend Status Check Button */}
+                  <button
+                    onClick={async () => {
+                      try {
+                        console.log('🔍 Checking backend status...');
+                        const response = await fetch('https://project-tracker-backend-rejs.onrender.com/api/health');
+                        const data = await response.json();
+                        console.log('✅ Backend status:', data);
+                        alert(`Backend Status: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`);
+                      } catch (error) {
+                        console.error('❌ Backend status check failed:', error);
+                        alert(`Backend Error: ${error.message}`);
+                      }
+                    }}
+                    className="px-3 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white font-medium transition-colors"
+                    title="Check if backend is responding"
+                  >
+                    🔍 Backend Status
                   </button>
                 </div>
                 
