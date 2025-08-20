@@ -25,33 +25,19 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN || 'no-token-set'
 });
 
-// Log GitHub configuration
 console.log('🔧 GitHub integration configured for:', GITHUB_CONFIG.REPO_OWNER, '/', GITHUB_CONFIG.REPO_NAME);
 console.log('🔑 GitHub token available:', !!process.env.GITHUB_TOKEN);
 
 // Session store configuration
 let sessionStore;
-if (process.env.NODE_ENV === 'production' && process.env.REDIS_URL) {
-  try {
-    const RedisStore = require('connect-redis').default;
-    const redis = require('redis');
-    const redisClient = redis.createClient({
-      url: process.env.REDIS_URL
-    });
-    redisClient.connect().catch(console.error);
-    sessionStore = new RedisStore({ client: redisClient });
-    console.log('✅ Using Redis for session storage');
-  } catch (error) {
-    console.warn('⚠️ Redis not available, falling back to memory store:', error.message);
-    sessionStore = undefined;
-  }
-} else {
+try {
+  const MemoryStore = require('express-session').MemoryStore;
+  sessionStore = new MemoryStore();
+  console.log('🔧 Using MemoryStore for session storage');
+} catch (error) {
+  console.error('❌ Failed to create MemoryStore:', error);
   sessionStore = undefined;
-  console.log('🔧 Using memory store (Redis not configured)');
 }
-
-console.log('🔧 Session store type:', sessionStore ? 'Redis' : 'Memory');
-console.log('🔧 Session store instance:', sessionStore);
 
 // Middleware
 app.use(cors({
@@ -72,75 +58,22 @@ app.use(express.json());
 app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: true, // Changed to true to ensure session is saved
+  resave: true,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS !== 'false',
+    secure: process.env.NODE_ENV === 'production', // true in production, false in development
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'none', // Allow cross-site requests
-    path: '/', // Allow cookie across entire domain
-    domain: process.env.COOKIE_DOMAIN || (process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined) // Configurable domain
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for production cross-origin, 'lax' for development
+    path: '/',
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined // Production domain
   },
-  name: 'project-tracker-session' // Custom session name
+  name: 'project-tracker-session'
 }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
-// Simple test endpoint
-app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: 'Backend is working!',
-    timestamp: new Date().toISOString(),
-    sessionId: req.sessionID,
-    hasSession: !!req.session
-  });
-});
-
-// Debug endpoint for session troubleshooting
-app.get('/api/debug/session', (req, res) => {
-  res.json({
-    sessionId: req.sessionID,
-    sessionData: req.session,
-    cookies: req.headers.cookie,
-    userAgent: req.headers['user-agent'],
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Test endpoint to manually create a session
-app.get('/api/test-session', (req, res) => {
-  console.log('🧪 Test session endpoint called');
-  console.log('🧪 Current session ID:', req.sessionID);
-  console.log('🧪 Current session data:', req.session);
-  
-  // Create a test session
-  req.session.testUser = { 
-    email: 'test@example.com', 
-    timestamp: new Date().toISOString() 
-  };
-  
-  req.session.save((err) => {
-    if (err) {
-      console.error('❌ Test session save error:', err);
-      return res.status(500).json({ error: 'Failed to save test session' });
-    }
-    
-    console.log('✅ Test session saved successfully');
-    console.log('✅ Session ID:', req.sessionID);
-    console.log('✅ Session data:', req.session);
-    console.log('📋 Response headers:', res.getHeaders());
-    
-    res.json({ 
-      success: true, 
-      sessionId: req.sessionID,
-      sessionData: req.session,
-      message: 'Test session created'
-    });
-  });
 });
 
 // GitHub token check endpoint
@@ -159,10 +92,7 @@ app.get('/api/debug/github', (req, res) => {
 app.post('/api/auth/login', (req, res) => {
   const { email } = req.body;
   
-  console.log('🔐 Login attempt for email:', email);
-  console.log('📋 Session ID:', req.sessionID);
-  
-  // Validate email against team members (you can customize this)
+  // Validate email against team members
   const teamMembers = [
     'kavisht@zenoti.com',
     'user2@zenoti.com',
@@ -170,47 +100,26 @@ app.post('/api/auth/login', (req, res) => {
   ];
   
   if (!teamMembers.includes(email)) {
-    console.log('❌ Unauthorized email:', email);
     return res.status(401).json({ error: 'Unauthorized email' });
   }
   
   // Store user in session
   req.session.user = { email, isAuthenticated: true };
 
-  // Force session save and wait for it to complete
   req.session.save((err) => {
     if (err) {
-      console.error('❌ Session save error:', err);
       return res.status(500).json({ error: 'Failed to create session' });
     }
-    
-    // Verify session was saved
-    console.log('✅ Session created for:', email);
-    console.log('🔑 Session data after save:', req.session);
-    console.log('🔑 Session ID after save:', req.sessionID);
-    console.log('🍪 Session cookie should be set with ID:', req.sessionID);
-    
-    // Set a test flag to verify session persistence
-    req.session.testFlag = 'session-working';
-    
-    // Log response headers to see if Set-Cookie is present
-    console.log('📋 Response headers before sending:', res.getHeaders());
     
     res.json({ 
       success: true, 
       user: { email },
       sessionId: req.sessionID 
     });
-    
-    // Log after response is sent
-    console.log('📤 Response sent. Check if Set-Cookie header was set.');
   });
 });
 
 app.get('/api/auth/status', (req, res) => {
-  console.log('🔍 Auth status check - Session ID:', req.sessionID);
-  console.log('🔍 Session data:', req.session);
-  
   if (req.session.user && req.session.user.isAuthenticated) {
     res.json({ 
       isAuthenticated: true, 
@@ -226,9 +135,7 @@ app.get('/api/auth/permissions', (req, res) => {
     return res.status(401).json({ error: 'Not authenticated' });
   }
   
-  // Check if user has commit permissions
-  // You can customize this logic based on your team structure
-  const adminEmails = ['kavisht@zenoti.com']; // Add admin emails here
+  const adminEmails = ['kavisht@zenoti.com'];
   const canCommit = adminEmails.includes(req.session.user.email);
   
   res.json({ 
@@ -251,7 +158,6 @@ app.post('/api/github/commit', async (req, res) => {
     
     const { data, commitMessage } = req.body;
     
-    // Get current file SHA if it exists
     let fileSHA = null;
     try {
       const { data: fileData } = await octokit.repos.getContent({
@@ -265,10 +171,8 @@ app.post('/api/github/commit', async (req, res) => {
       if (error.status !== 404) {
         throw error;
       }
-      // File doesn't exist yet, that's fine
     }
     
-    // Prepare commit payload
     const payload = {
       owner: GITHUB_CONFIG.REPO_OWNER,
       repo: GITHUB_CONFIG.REPO_NAME,
@@ -282,7 +186,6 @@ app.post('/api/github/commit', async (req, res) => {
       payload.sha = fileSHA;
     }
     
-    // Commit to GitHub
     const { data: commitResult } = await octokit.repos.createOrUpdateFileContents(payload);
     
     res.json({ 
@@ -302,21 +205,10 @@ app.post('/api/github/commit', async (req, res) => {
 
 app.get('/api/github/fetch', async (req, res) => {
   try {
-    console.log('🔍 GitHub fetch request - Session ID:', req.sessionID);
-    console.log('🔍 GitHub fetch request - Session data:', req.session);
-    console.log('🔍 GitHub fetch request - Cookies:', req.headers.cookie);
-    console.log('🔍 GitHub fetch request - User agent:', req.headers['user-agent']);
-    
     if (!req.session.user || !req.session.user.isAuthenticated) {
-      console.log('❌ GitHub fetch - Session not authenticated');
-      console.log('❌ Session user:', req.session.user);
-      console.log('❌ Session authenticated:', req.session.user?.isAuthenticated);
       return res.status(401).json({ error: 'Not authenticated' });
     }
     
-    console.log('✅ GitHub fetch - User authenticated:', req.session.user.email);
-    
-    // Fetch data from GitHub
     const { data: fileData } = await octokit.repos.getContent({
       owner: GITHUB_CONFIG.REPO_OWNER,
       repo: GITHUB_CONFIG.REPO_NAME,
@@ -324,30 +216,21 @@ app.get('/api/github/fetch', async (req, res) => {
       ref: GITHUB_CONFIG.DATA_BRANCH
     });
     
-    // Decode content
     const content = JSON.parse(Buffer.from(fileData.content, 'base64').toString());
     
-    console.log('✅ GitHub fetch - Data retrieved successfully');
     res.json(content);
     
   } catch (error) {
     if (error.status === 404) {
-      console.log('⚠️ GitHub fetch - No data found (404)');
       return res.status(404).json({ error: 'No data found' });
     }
     
-    console.error('❌ GitHub fetch error:', error);
+    console.error('GitHub fetch error:', error);
     res.status(500).json({ 
       error: 'Failed to fetch data',
       details: error.message 
     });
   }
-});
-
-// Error handling middleware
-app.use((error, req, res, next) => {
-  console.error('Server error:', error);
-  res.status(500).json({ error: 'Internal server error' });
 });
 
 // Start server
