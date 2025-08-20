@@ -7,20 +7,20 @@
       "priority": "high"
     },
     {
-      "id": 18,
-      "name": "Define audit process for new designs",
-      "category": "Audit",
-      "priority": "high"
-    },
-    {
-      "id": 4,
-      "name": "Shared CN Libraries themed in the Zenoti theme",
+      "id": 2,
+      "name": "Building widgets using AI - Research and POCs",
       "category": "Design Roadmap",
       "priority": "high"
     },
     {
-      "id": 28,
-      "name": "Define a consistent pattern for step wizards",
+      "id": 3,
+      "name": "Icon set preparation for multiple modes",
+      "category": "Design Roadmap",
+      "priority": "medium"
+    },
+    {
+      "id": 4,
+      "name": "Shared CN Libraries themed in the Zenoti theme",
       "category": "Design Roadmap",
       "priority": "high"
     },
@@ -31,9 +31,9 @@
       "priority": "high"
     },
     {
-      "id": 2,
-      "name": "Building widgets using AI - Research and POCs",
-      "category": "Design Roadmap",
+      "id": 18,
+      "name": "Define audit process for new designs",
+      "category": "Audit",
       "priority": "high"
     },
     {
@@ -67,6 +67,12 @@
       "priority": "medium"
     },
     {
+      "id": 28,
+      "name": "Define a consistent pattern for step wizards",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
       "id": 25,
       "name": "Define vibrant color palette for Charts & Graphs",
       "category": "Design Roadmap",
@@ -89,12 +95,6 @@
       "name": "Add Charts & Graphs in the DS (Hi-Chart plugin integration)",
       "category": "Design Roadmap",
       "priority": "high"
-    },
-    {
-      "id": 3,
-      "name": "Icon set preparation for multiple modes",
-      "category": "Design Roadmap",
-      "priority": "medium"
     }
   ],
   "cellData": {
@@ -192,9 +192,166 @@
     },
     "5-5": {
       "status": "planned"
+    },
+    "3-0": {
+      "status": "planned",
+      "assignee": "Subhranta"
+    },
+    "3-1": {
+      "status": "planned",
+      "assignee": "Subhranta"
+    },
+    "3-2": {
+      "status": "planned",
+      "assignee": "Subhranta"
+    },
+    "3-3": {
+      "status": "planned",
+      "assignee": "Subhranta"
+    },
+    "4-1": {
+      "status": "planned"
+    },
+    "4-2": {
+      "status": "planned"
+    },
+    "4-3": {
+      "status": "planned"
     }
   },
   "changeLog": [
+    {
+      "id": 1755674417812,
+      "timestamp": "2025-08-20T07:20:17.812Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W4",
+      "taskId": 4,
+      "weekId": 3,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755674417489,
+      "timestamp": "2025-08-20T07:20:17.489Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W3",
+      "taskId": 4,
+      "weekId": 2,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755674417058,
+      "timestamp": "2025-08-20T07:20:17.058Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W2",
+      "taskId": 4,
+      "weekId": 1,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755674393584,
+      "timestamp": "2025-08-20T07:19:53.584Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "assignment",
+      "details": "Assigned Icon set preparation for multiple modes to Subhranta for W4",
+      "taskId": 3,
+      "weekId": 3,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674393584,
+      "timestamp": "2025-08-20T07:19:53.584Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W4",
+      "taskId": 3,
+      "weekId": 3,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674393230,
+      "timestamp": "2025-08-20T07:19:53.230Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "assignment",
+      "details": "Assigned Icon set preparation for multiple modes to Subhranta for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674393230,
+      "timestamp": "2025-08-20T07:19:53.230Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674392308,
+      "timestamp": "2025-08-20T07:19:52.308Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "assignment",
+      "details": "Assigned Icon set preparation for multiple modes to Subhranta for W2",
+      "taskId": 3,
+      "weekId": 1,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674392308,
+      "timestamp": "2025-08-20T07:19:52.308Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W2",
+      "taskId": 3,
+      "weekId": 1,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674391557,
+      "timestamp": "2025-08-20T07:19:51.557Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "assignment",
+      "details": "Assigned Icon set preparation for multiple modes to Subhranta for W1",
+      "taskId": 3,
+      "weekId": 0,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674391557,
+      "timestamp": "2025-08-20T07:19:51.557Z",
+      "user": "Subhranta",
+      "userId": 5,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W1",
+      "taskId": 3,
+      "weekId": 0,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755674309911,
+      "timestamp": "2025-08-20T07:18:29.911Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "sync",
+      "details": "User Kavish synced latest data from backend",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
     {
       "id": 1755674172072,
       "timestamp": "2025-08-20T07:16:12.072Z",
@@ -2484,7 +2641,7 @@
       "taskName": "Build a roadmap of AI Components in the UI"
     }
   ],
-  "lastUpdated": "2025-08-20T07:16:15.921Z",
+  "lastUpdated": "2025-08-20T07:20:18.885Z",
   "committedBy": "Kavish",
   "version": "1.0.0"
 }
