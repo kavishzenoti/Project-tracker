@@ -39,6 +39,12 @@ try {
   sessionStore = undefined;
 }
 
+// Production session configuration
+const isProduction = process.env.NODE_ENV === 'production';
+console.log('🔧 Environment:', isProduction ? 'Production' : 'Development');
+console.log('🔧 Frontend URL:', process.env.FRONTEND_URL);
+console.log('🔧 Session store:', sessionStore ? 'MemoryStore' : 'None');
+
 // Middleware
 app.use(cors({
   origin: [
@@ -50,8 +56,11 @@ app.use(cors({
   ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  exposedHeaders: ['Set-Cookie']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Origin', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
+  // Production CORS settings
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
@@ -66,14 +75,39 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for production cross-origin, 'lax' for development
     path: '/',
-    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined // Production domain
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined, // Production domain
+    // Force cookie generation in production
+    expires: process.env.NODE_ENV === 'production' ? new Date(Date.now() + 24 * 60 * 60 * 1000) : undefined
   },
   name: 'project-tracker-session'
 }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    isProduction: process.env.NODE_ENV === 'production'
+  });
+});
+
+// Production debug endpoint
+app.get('/api/debug/production', (req, res) => {
+  const debugInfo = {
+    environment: process.env.NODE_ENV || 'development',
+    isProduction: process.env.NODE_ENV === 'production',
+    frontendUrl: process.env.FRONTEND_URL,
+    sessionStore: sessionStore ? 'MemoryStore' : 'None',
+    requestOrigin: req.headers.origin,
+    requestHost: req.headers.host,
+    sessionId: req.sessionID,
+    hasSession: !!req.session,
+    timestamp: new Date().toISOString()
+  };
+  
+  console.log('🔍 Production debug info:', debugInfo);
+  res.json(debugInfo);
 });
 
 // GitHub token check endpoint
