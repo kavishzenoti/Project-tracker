@@ -7,20 +7,20 @@
       "priority": "high"
     },
     {
-      "id": 2,
-      "name": "Building widgets using AI - Research and POCs",
-      "category": "Design Roadmap",
+      "id": 18,
+      "name": "Define audit process for new designs",
+      "category": "Audit",
       "priority": "high"
-    },
-    {
-      "id": 3,
-      "name": "Icon set preparation for multiple modes",
-      "category": "Design Roadmap",
-      "priority": "medium"
     },
     {
       "id": 4,
       "name": "Shared CN Libraries themed in the Zenoti theme",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
+      "id": 28,
+      "name": "Define a consistent pattern for step wizards",
       "category": "Design Roadmap",
       "priority": "high"
     },
@@ -31,9 +31,9 @@
       "priority": "high"
     },
     {
-      "id": 18,
-      "name": "Define audit process for new designs",
-      "category": "Audit",
+      "id": 2,
+      "name": "Building widgets using AI - Research and POCs",
+      "category": "Design Roadmap",
       "priority": "high"
     },
     {
@@ -65,14 +65,2413 @@
       "name": "Icons usage and visual layering style guide",
       "category": "Advocacy & Training",
       "priority": "medium"
+    },
+    {
+      "id": 25,
+      "name": "Define vibrant color palette for Charts & Graphs",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
+      "id": 26,
+      "name": "Define purpose and usage of Gradients",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
+      "id": 27,
+      "name": "Add component for Simple & Nested Tables in DS",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
+      "id": 29,
+      "name": "Add Charts & Graphs in the DS (Hi-Chart plugin integration)",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
+      "id": 3,
+      "name": "Icon set preparation for multiple modes",
+      "category": "Design Roadmap",
+      "priority": "medium"
     }
   ],
   "cellData": {
+    "5-0": {
+      "status": "planned"
+    },
+    "5-1": {
+      "status": "planned",
+      "assignee": "Agam"
+    },
+    "5-2": {
+      "status": "planned"
+    },
+    "2-0": {
+      "status": "planned"
+    },
+    "2-1": {
+      "status": "planned"
+    },
+    "2-2": {
+      "status": "planned"
+    },
+    "2-3": {
+      "status": "blocked"
+    },
+    "2-4": {
+      "status": "delayed",
+      "assignee": "Kavish"
+    },
+    "2-5": {
+      "status": "delayed",
+      "assignee": "Kavish"
+    },
+    "2-6": {
+      "status": "delayed",
+      "assignee": "Kavish"
+    },
+    "4-0": {
+      "status": "planned"
+    },
+    "26-0": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "26-1": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "26-2": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "26-3": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "26-4": {
+      "status": "blocked",
+      "assignee": "Nitin"
+    },
+    "26-5": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "26-6": {
+      "status": "completed",
+      "assignee": "Nitin"
+    },
+    "28-0": {
+      "status": "planned"
+    },
+    "28-1": {
+      "status": "planned"
+    },
+    "28-2": {
+      "status": "planned"
+    },
+    "28-3": {
+      "status": "planned"
+    },
+    "28-4": {
+      "status": "planned"
+    },
+    "28-5": {
+      "status": "planned"
+    },
+    "1-5": {
+      "status": "planned"
+    },
     "1-0": {
+      "status": "planned"
+    },
+    "5-4": {
+      "status": "planned"
+    },
+    "5-5": {
       "status": "planned"
     }
   },
   "changeLog": [
+    {
+      "id": 1755674172072,
+      "timestamp": "2025-08-20T07:16:12.072Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Mobile & tablet support from DS 3.0 to planned for W6",
+      "taskId": 5,
+      "weekId": 5,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755674170721,
+      "timestamp": "2025-08-20T07:16:10.721Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Mobile & tablet support from DS 3.0 to planned for W5",
+      "taskId": 5,
+      "weekId": 4,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755674130175,
+      "timestamp": "2025-08-20T07:15:30.175Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "sync",
+      "details": "User Kavish synced latest data from backend",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755670329241,
+      "timestamp": "2025-08-20T06:12:09.241Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755668512201,
+      "timestamp": "2025-08-20T05:41:52.201Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Building widgets using AI - Research and POCs to Kavish for W7",
+      "taskId": 2,
+      "weekId": 6,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668512201,
+      "timestamp": "2025-08-20T05:41:52.201Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Building widgets using AI - Research and POCs to Kavish for W6",
+      "taskId": 2,
+      "weekId": 5,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668512201,
+      "timestamp": "2025-08-20T05:41:52.201Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Building widgets using AI - Research and POCs to Kavish for W5",
+      "taskId": 2,
+      "weekId": 4,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668508180,
+      "timestamp": "2025-08-20T05:41:48.180Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to delayed for W7",
+      "taskId": 2,
+      "weekId": 6,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668508180,
+      "timestamp": "2025-08-20T05:41:48.180Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to delayed for W6",
+      "taskId": 2,
+      "weekId": 5,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668508180,
+      "timestamp": "2025-08-20T05:41:48.180Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to delayed for W5",
+      "taskId": 2,
+      "weekId": 4,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668501616,
+      "timestamp": "2025-08-20T05:41:41.616Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to blocked for W4",
+      "taskId": 2,
+      "weekId": 3,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755668472530,
+      "timestamp": "2025-08-20T05:41:12.530Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W6",
+      "taskId": 28,
+      "weekId": 5,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755668472530,
+      "timestamp": "2025-08-20T05:41:12.530Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W5",
+      "taskId": 28,
+      "weekId": 4,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755668472530,
+      "timestamp": "2025-08-20T05:41:12.530Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W4",
+      "taskId": 28,
+      "weekId": 3,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755668472530,
+      "timestamp": "2025-08-20T05:41:12.530Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W3",
+      "taskId": 28,
+      "weekId": 2,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755668472530,
+      "timestamp": "2025-08-20T05:41:12.530Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W2",
+      "taskId": 28,
+      "weekId": 1,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755668468357,
+      "timestamp": "2025-08-20T05:41:08.357Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W1",
+      "taskId": 28,
+      "weekId": 0,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755600751983,
+      "timestamp": "2025-08-19T10:52:31.983Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to blocked for W5",
+      "taskId": 26,
+      "weekId": 4,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748896,
+      "timestamp": "2025-08-19T10:52:28.896Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W7",
+      "taskId": 26,
+      "weekId": 6,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748896,
+      "timestamp": "2025-08-19T10:52:28.896Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W6",
+      "taskId": 26,
+      "weekId": 5,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748896,
+      "timestamp": "2025-08-19T10:52:28.896Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W5",
+      "taskId": 26,
+      "weekId": 4,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748896,
+      "timestamp": "2025-08-19T10:52:28.896Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W4",
+      "taskId": 26,
+      "weekId": 3,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748895,
+      "timestamp": "2025-08-19T10:52:28.895Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W3",
+      "taskId": 26,
+      "weekId": 2,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748895,
+      "timestamp": "2025-08-19T10:52:28.895Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W2",
+      "taskId": 26,
+      "weekId": 1,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600748895,
+      "timestamp": "2025-08-19T10:52:28.895Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to completed for W1",
+      "taskId": 26,
+      "weekId": 0,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W7",
+      "taskId": 26,
+      "weekId": 6,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W6",
+      "taskId": 26,
+      "weekId": 5,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W5",
+      "taskId": 26,
+      "weekId": 4,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W4",
+      "taskId": 26,
+      "weekId": 3,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W3",
+      "taskId": 26,
+      "weekId": 2,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W2",
+      "taskId": 26,
+      "weekId": 1,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600744266,
+      "timestamp": "2025-08-19T10:52:24.266Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define purpose and usage of Gradients to Nitin for W1",
+      "taskId": 26,
+      "weekId": 0,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W7",
+      "taskId": 26,
+      "weekId": 6,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W6",
+      "taskId": 26,
+      "weekId": 5,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W5",
+      "taskId": 26,
+      "weekId": 4,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W4",
+      "taskId": 26,
+      "weekId": 3,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W3",
+      "taskId": 26,
+      "weekId": 2,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600742679,
+      "timestamp": "2025-08-19T10:52:22.679Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W2",
+      "taskId": 26,
+      "weekId": 1,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600741365,
+      "timestamp": "2025-08-19T10:52:21.365Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define purpose and usage of Gradients to planned for W1",
+      "taskId": 26,
+      "weekId": 0,
+      "taskName": "Define purpose and usage of Gradients"
+    },
+    {
+      "id": 1755600715721,
+      "timestamp": "2025-08-19T10:51:55.721Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W10",
+      "taskId": 28,
+      "weekId": 9,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W9",
+      "taskId": 28,
+      "weekId": 8,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W8",
+      "taskId": 28,
+      "weekId": 7,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W7",
+      "taskId": 28,
+      "weekId": 6,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W6",
+      "taskId": 28,
+      "weekId": 5,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W5",
+      "taskId": 28,
+      "weekId": 4,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W4",
+      "taskId": 28,
+      "weekId": 3,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W3",
+      "taskId": 28,
+      "weekId": 2,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W2",
+      "taskId": 28,
+      "weekId": 1,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595327465,
+      "timestamp": "2025-08-19T09:22:07.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Define a consistent pattern for step wizards for W1",
+      "taskId": 28,
+      "weekId": 0,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595326051,
+      "timestamp": "2025-08-19T09:22:06.051Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W4",
+      "taskId": 28,
+      "weekId": 3,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595326051,
+      "timestamp": "2025-08-19T09:22:06.051Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W3",
+      "taskId": 28,
+      "weekId": 2,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595326050,
+      "timestamp": "2025-08-19T09:22:06.050Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W2",
+      "taskId": 28,
+      "weekId": 1,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W7",
+      "taskId": 4,
+      "weekId": 6,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W6",
+      "taskId": 4,
+      "weekId": 5,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W5",
+      "taskId": 4,
+      "weekId": 4,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W4",
+      "taskId": 4,
+      "weekId": 3,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W3",
+      "taskId": 4,
+      "weekId": 2,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W2",
+      "taskId": 4,
+      "weekId": 1,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595323974,
+      "timestamp": "2025-08-19T09:22:03.974Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W8",
+      "taskId": 1,
+      "weekId": 7,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W7",
+      "taskId": 1,
+      "weekId": 6,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595285978,
+      "timestamp": "2025-08-19T09:21:25.978Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Visual guide for Ai theming & visual interaction for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W7",
+      "taskId": 1,
+      "weekId": 6,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595278922,
+      "timestamp": "2025-08-19T09:21:18.922Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595275426,
+      "timestamp": "2025-08-19T09:21:15.426Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595220134,
+      "timestamp": "2025-08-19T09:20:20.134Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Visual guide for Ai theming & visual interaction to planned for W8",
+      "taskId": 1,
+      "weekId": 7,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755595195199,
+      "timestamp": "2025-08-19T09:19:55.199Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W7",
+      "taskId": 4,
+      "weekId": 6,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755595192589,
+      "timestamp": "2025-08-19T09:19:52.589Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W1",
+      "taskId": 28,
+      "weekId": 0,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W7",
+      "taskId": 2,
+      "weekId": 6,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W6",
+      "taskId": 2,
+      "weekId": 5,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W5",
+      "taskId": 2,
+      "weekId": 4,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W4",
+      "taskId": 2,
+      "weekId": 3,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W3",
+      "taskId": 2,
+      "weekId": 2,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585587148,
+      "timestamp": "2025-08-19T06:39:47.148Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W2",
+      "taskId": 2,
+      "weekId": 1,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755585584291,
+      "timestamp": "2025-08-19T06:39:44.291Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W1",
+      "taskId": 2,
+      "weekId": 0,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755511584033,
+      "timestamp": "2025-08-18T10:06:24.033Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Adapting components to support Mobile & Tablet to Agam for W2",
+      "taskId": 5,
+      "weekId": 1,
+      "taskName": "Adapting components to support Mobile & Tablet"
+    },
+    {
+      "id": 1755511564511,
+      "timestamp": "2025-08-18T10:06:04.511Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Adapting components to support Mobile & Tablet to planned for W3",
+      "taskId": 5,
+      "weekId": 2,
+      "taskName": "Adapting components to support Mobile & Tablet"
+    },
+    {
+      "id": 1755511564002,
+      "timestamp": "2025-08-18T10:06:04.002Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Adapting components to support Mobile & Tablet to planned for W2",
+      "taskId": 5,
+      "weekId": 1,
+      "taskName": "Adapting components to support Mobile & Tablet"
+    },
+    {
+      "id": 1755511563393,
+      "timestamp": "2025-08-18T10:06:03.393Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Adapting components to support Mobile & Tablet to planned for W1",
+      "taskId": 5,
+      "weekId": 0,
+      "taskName": "Adapting components to support Mobile & Tablet"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W10",
+      "taskId": 28,
+      "weekId": 9,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W9",
+      "taskId": 28,
+      "weekId": 8,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W8",
+      "taskId": 28,
+      "weekId": 7,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W7",
+      "taskId": 28,
+      "weekId": 6,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W6",
+      "taskId": 28,
+      "weekId": 5,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509972279,
+      "timestamp": "2025-08-18T09:39:32.279Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Define a consistent pattern for step wizards to Charissa for W5",
+      "taskId": 28,
+      "weekId": 4,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509970647,
+      "timestamp": "2025-08-18T09:39:30.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W10",
+      "taskId": 28,
+      "weekId": 9,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509970647,
+      "timestamp": "2025-08-18T09:39:30.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W9",
+      "taskId": 28,
+      "weekId": 8,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509970647,
+      "timestamp": "2025-08-18T09:39:30.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W8",
+      "taskId": 28,
+      "weekId": 7,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509970647,
+      "timestamp": "2025-08-18T09:39:30.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W7",
+      "taskId": 28,
+      "weekId": 6,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509970647,
+      "timestamp": "2025-08-18T09:39:30.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W6",
+      "taskId": 28,
+      "weekId": 5,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509969420,
+      "timestamp": "2025-08-18T09:39:29.420Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Define a consistent pattern for step wizards to planned for W5",
+      "taskId": 28,
+      "weekId": 4,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W6",
+      "taskId": 4,
+      "weekId": 5,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W5",
+      "taskId": 4,
+      "weekId": 4,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W4",
+      "taskId": 4,
+      "weekId": 3,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W3",
+      "taskId": 4,
+      "weekId": 2,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W2",
+      "taskId": 4,
+      "weekId": 1,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509967877,
+      "timestamp": "2025-08-18T09:39:27.877Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "assignment",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to Kavish for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509963325,
+      "timestamp": "2025-08-18T09:39:23.325Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W6",
+      "taskId": 4,
+      "weekId": 5,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509963325,
+      "timestamp": "2025-08-18T09:39:23.325Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W5",
+      "taskId": 4,
+      "weekId": 4,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509963325,
+      "timestamp": "2025-08-18T09:39:23.325Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W4",
+      "taskId": 4,
+      "weekId": 3,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509963325,
+      "timestamp": "2025-08-18T09:39:23.325Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W3",
+      "taskId": 4,
+      "weekId": 2,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509963325,
+      "timestamp": "2025-08-18T09:39:23.325Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W2",
+      "taskId": 4,
+      "weekId": 1,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755509961743,
+      "timestamp": "2025-08-18T09:39:21.743Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755492695581,
+      "timestamp": "2025-08-18T04:51:35.581Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "commit",
+      "details": "User Kavish committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755492693999,
+      "timestamp": "2025-08-18T04:51:33.999Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Zenoti themed libraries (like Shared CN) to expedite the component development for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755492691750,
+      "timestamp": "2025-08-18T04:51:31.750Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Zenoti themed libraries (like Shared CN) to expedite the component development to planned for W1",
+      "taskId": 4,
+      "weekId": 0,
+      "taskName": "Zenoti themed libraries (like Shared CN) to expedite the component development"
+    },
+    {
+      "id": 1755492510720,
+      "timestamp": "2025-08-18T04:48:30.720Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "commit",
+      "details": "User Kavish committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755492479686,
+      "timestamp": "2025-08-18T04:47:59.686Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define a consistent pattern for step wizards\" reordered within Design Roadmap",
+      "taskId": 28,
+      "weekId": null,
+      "taskName": "Define a consistent pattern for step wizards"
+    },
+    {
+      "id": 1755492459915,
+      "timestamp": "2025-08-18T04:47:39.915Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Add Charts & Graphs in the DS (Hi-Chart plugin integration)\" reordered within Design Roadmap",
+      "taskId": 29,
+      "weekId": null,
+      "taskName": "Add Charts & Graphs in the DS (Hi-Chart plugin integration)"
+    },
+    {
+      "id": 1755492458555,
+      "timestamp": "2025-08-18T04:47:38.555Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed priority of \"Add Charts & Graphs in the DS (Hi-Chart plugin integration)\" to high",
+      "taskId": 29,
+      "weekId": null,
+      "taskName": "Add Charts & Graphs in the DS (Hi-Chart plugin integration)"
+    },
+    {
+      "id": 1755492454099,
+      "timestamp": "2025-08-18T04:47:34.099Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Icon set preparation (light, medium, filled)\" reordered within Design Roadmap",
+      "taskId": 3,
+      "weekId": null,
+      "taskName": "Icon set preparation (light, medium, filled)"
+    },
+    {
+      "id": 1755492451405,
+      "timestamp": "2025-08-18T04:47:31.405Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Icon set preparation (light, medium, filled)\" reordered within Design Roadmap",
+      "taskId": 3,
+      "weekId": null,
+      "taskName": "Icon set preparation (light, medium, filled)"
+    },
+    {
+      "id": 1755492438310,
+      "timestamp": "2025-08-18T04:47:18.310Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed task name from \"Icon set preparation for multiple modes\" to \"Icon set preparation (light, medium, filled)\"",
+      "taskId": 3,
+      "weekId": null,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755492412872,
+      "timestamp": "2025-08-18T04:46:52.872Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed priority of \"Enable Design to Code workflows for all team members\" to high",
+      "taskId": 23,
+      "weekId": null,
+      "taskName": "Enable Design to Code workflows for all team members"
+    },
+    {
+      "id": 1755492410046,
+      "timestamp": "2025-08-18T04:46:50.046Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed priority of \"Icons usage and visual layering style guide\" to low",
+      "taskId": 24,
+      "weekId": null,
+      "taskName": "Icons usage and visual layering style guide"
+    },
+    {
+      "id": 1755492402783,
+      "timestamp": "2025-08-18T04:46:42.783Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed task name from \"Enable Design to Code workflows\" to \"Enable Design to Code workflows for all team members\"",
+      "taskId": 23,
+      "weekId": null,
+      "taskName": "Enable Design to Code workflows"
+    },
+    {
+      "id": 1755492020447,
+      "timestamp": "2025-08-18T04:40:20.447Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "commit",
+      "details": "User Kavish committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755492016465,
+      "timestamp": "2025-08-18T04:40:16.465Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "cell_cleared",
+      "details": "Cleared Icon set preparation for multiple modes for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755492014094,
+      "timestamp": "2025-08-18T04:40:14.094Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755491883553,
+      "timestamp": "2025-08-18T04:38:03.553Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_created",
+      "details": "Created new task: Add Charts & Graphs in the DS (Hi-Chart plugin integration) in Design Roadmap",
+      "taskId": 29,
+      "weekId": null
+    },
+    {
+      "id": 1755491854883,
+      "timestamp": "2025-08-18T04:37:34.883Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_created",
+      "details": "Created new task: Define a consistent pattern for step wizards in Design Roadmap",
+      "taskId": 28,
+      "weekId": null
+    },
+    {
+      "id": 1755491823324,
+      "timestamp": "2025-08-18T04:37:03.324Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_created",
+      "details": "Created new task: Add component for Simple & Nested Tables in DS in Design Roadmap",
+      "taskId": 27,
+      "weekId": null
+    },
+    {
+      "id": 1755491792647,
+      "timestamp": "2025-08-18T04:36:32.647Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed task name from \"Mobile & tablet support from DS 3.0\" to \"Adapting components to support Mobile & Tablet\"",
+      "taskId": 5,
+      "weekId": null,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755491751550,
+      "timestamp": "2025-08-18T04:35:51.550Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_created",
+      "details": "Created new task: Define purpose and usage of Gradients in Design Roadmap",
+      "taskId": 26,
+      "weekId": null
+    },
+    {
+      "id": 1755491685891,
+      "timestamp": "2025-08-18T04:34:45.891Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Mobile & tablet support from DS 3.0\" reordered within Design Roadmap",
+      "taskId": 5,
+      "weekId": null,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755491684389,
+      "timestamp": "2025-08-18T04:34:44.389Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Building widgets using AI - Research and POCs\" reordered within Design Roadmap",
+      "taskId": 2,
+      "weekId": null,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755491681792,
+      "timestamp": "2025-08-18T04:34:41.792Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Mobile & tablet support from DS 3.0\" reordered within Design Roadmap",
+      "taskId": 5,
+      "weekId": null,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755491678444,
+      "timestamp": "2025-08-18T04:34:38.444Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Building widgets using AI - Research and POCs\" reordered within Design Roadmap",
+      "taskId": 2,
+      "weekId": null,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755491675777,
+      "timestamp": "2025-08-18T04:34:35.777Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Mobile & tablet support from DS 3.0\" reordered within Design Roadmap",
+      "taskId": 5,
+      "weekId": null,
+      "taskName": "Mobile & tablet support from DS 3.0"
+    },
+    {
+      "id": 1755491671280,
+      "timestamp": "2025-08-18T04:34:31.280Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Visual guide for Ai theming & visual interaction\" reordered within Design Roadmap",
+      "taskId": 1,
+      "weekId": null,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755491668457,
+      "timestamp": "2025-08-18T04:34:28.457Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Visual guide for Ai theming & visual interaction\" reordered within Design Roadmap",
+      "taskId": 1,
+      "weekId": null,
+      "taskName": "Visual guide for Ai theming & visual interaction"
+    },
+    {
+      "id": 1755491665163,
+      "timestamp": "2025-08-18T04:34:25.163Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491662884,
+      "timestamp": "2025-08-18T04:34:22.884Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491659857,
+      "timestamp": "2025-08-18T04:34:19.857Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491656074,
+      "timestamp": "2025-08-18T04:34:16.074Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491649565,
+      "timestamp": "2025-08-18T04:34:09.565Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491639444,
+      "timestamp": "2025-08-18T04:33:59.444Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Define vibrant color palette for Charts & Graphs\" reordered within Design Roadmap",
+      "taskId": 25,
+      "weekId": null,
+      "taskName": "Define vibrant color palette for Charts & Graphs"
+    },
+    {
+      "id": 1755491636275,
+      "timestamp": "2025-08-18T04:33:56.275Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_created",
+      "details": "Created new task: Define vibrant color palette for Charts & Graphs in Design Roadmap",
+      "taskId": 25,
+      "weekId": null
+    },
+    {
+      "id": 1755491570989,
+      "timestamp": "2025-08-18T04:32:50.989Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed task name from \"Shared CN Libraries themed in the Zenoti theme\" to \"Zenoti themed libraries (like Shared CN) to expedite the component development\"",
+      "taskId": 4,
+      "weekId": null,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755491487159,
+      "timestamp": "2025-08-18T04:31:27.159Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Icon set preparation for multiple modes\" reordered within Design Roadmap",
+      "taskId": 3,
+      "weekId": null,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755491457486,
+      "timestamp": "2025-08-18T04:30:57.487Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_reordered",
+      "details": "Task \"Building widgets using AI - Research and POCs\" reordered within Design Roadmap",
+      "taskId": 2,
+      "weekId": null,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755491381107,
+      "timestamp": "2025-08-18T04:29:41.107Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "task_edited",
+      "details": "Changed task name from \"Build a roadmap of AI Components in the UI\" to \"Visual guide for Ai theming & visual interaction\"",
+      "taskId": 1,
+      "weekId": null,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755490324375,
+      "timestamp": "2025-08-18T04:12:04.375Z",
+      "user": "kavisht",
+      "action": "commit",
+      "details": "User kavisht committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755490313904,
+      "timestamp": "2025-08-18T04:11:53.904Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489962167,
+      "timestamp": "2025-08-18T04:06:02.167Z",
+      "user": "charissag",
+      "action": "commit",
+      "details": "User charissag committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755489916537,
+      "timestamp": "2025-08-18T04:05:16.537Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755489877648,
+      "timestamp": "2025-08-18T04:04:37.648Z",
+      "user": "kavisht",
+      "action": "commit",
+      "details": "User kavisht committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W8",
+      "taskId": 4,
+      "weekId": 7,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W7",
+      "taskId": 4,
+      "weekId": 6,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W6",
+      "taskId": 4,
+      "weekId": 5,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W5",
+      "taskId": 4,
+      "weekId": 4,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W4",
+      "taskId": 4,
+      "weekId": 3,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489875201,
+      "timestamp": "2025-08-18T04:04:35.201Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W3",
+      "taskId": 4,
+      "weekId": 2,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489874068,
+      "timestamp": "2025-08-18T04:04:34.068Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Shared CN Libraries themed in the Zenoti theme to planned for W2",
+      "taskId": 4,
+      "weekId": 1,
+      "taskName": "Shared CN Libraries themed in the Zenoti theme"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W11",
+      "taskId": 2,
+      "weekId": 10,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W10",
+      "taskId": 2,
+      "weekId": 9,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W9",
+      "taskId": 2,
+      "weekId": 8,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W8",
+      "taskId": 2,
+      "weekId": 7,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W7",
+      "taskId": 2,
+      "weekId": 6,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W6",
+      "taskId": 2,
+      "weekId": 5,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489870520,
+      "timestamp": "2025-08-18T04:04:30.520Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W5",
+      "taskId": 2,
+      "weekId": 4,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489869522,
+      "timestamp": "2025-08-18T04:04:29.522Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W4",
+      "taskId": 2,
+      "weekId": 3,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W7",
+      "taskId": 1,
+      "weekId": 6,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489866787,
+      "timestamp": "2025-08-18T04:04:26.787Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755489859451,
+      "timestamp": "2025-08-18T04:04:19.451Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454778882,
+      "timestamp": "2025-08-17T18:19:38.882Z",
+      "user": "kavisht",
+      "action": "commit",
+      "details": "User kavisht committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755454770028,
+      "timestamp": "2025-08-17T18:19:30.028Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454419565,
+      "timestamp": "2025-08-17T18:13:39.565Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W6",
+      "taskId": 3,
+      "weekId": 5,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454419565,
+      "timestamp": "2025-08-17T18:13:39.565Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W5",
+      "taskId": 3,
+      "weekId": 4,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454419565,
+      "timestamp": "2025-08-17T18:13:39.565Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W4",
+      "taskId": 3,
+      "weekId": 3,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454419565,
+      "timestamp": "2025-08-17T18:13:39.565Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454419565,
+      "timestamp": "2025-08-17T18:13:39.565Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W2",
+      "taskId": 3,
+      "weekId": 1,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454418440,
+      "timestamp": "2025-08-17T18:13:38.440Z",
+      "user": "charissag",
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W1",
+      "taskId": 3,
+      "weekId": 0,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1755454364147,
+      "timestamp": "2025-08-17T18:12:44.147Z",
+      "user": "kavisht",
+      "action": "commit",
+      "details": "User kavisht committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755454362012,
+      "timestamp": "2025-08-17T18:12:42.012Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454362012,
+      "timestamp": "2025-08-17T18:12:42.012Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454362012,
+      "timestamp": "2025-08-17T18:12:42.012Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454362012,
+      "timestamp": "2025-08-17T18:12:42.012Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755454361116,
+      "timestamp": "2025-08-17T18:12:41.116Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Build a roadmap of AI Components in the UI to planned for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755452900259,
+      "timestamp": "2025-08-17T17:48:20.259Z",
+      "user": "kavisht",
+      "action": "commit",
+      "details": "User kavisht committed changes to the project",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W7",
+      "taskId": 2,
+      "weekId": 6,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W6",
+      "taskId": 2,
+      "weekId": 5,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W5",
+      "taskId": 2,
+      "weekId": 4,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W4",
+      "taskId": 2,
+      "weekId": 3,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W3",
+      "taskId": 2,
+      "weekId": 2,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452877412,
+      "timestamp": "2025-08-17T17:47:57.412Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W2",
+      "taskId": 2,
+      "weekId": 1,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755452876082,
+      "timestamp": "2025-08-17T17:47:56.082Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Assigned Building widgets using AI - Research and POCs to planned for W1",
+      "taskId": 2,
+      "weekId": 0,
+      "taskName": "Building widgets using AI - Research and POCs"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450979918,
+      "timestamp": "2025-08-17T17:16:19.918Z",
+      "user": "kavisht",
+      "action": "assignment",
+      "details": "Assigned Build a roadmap of AI Components in the UI to Kavish for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450973995,
+      "timestamp": "2025-08-17T17:16:13.995Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W6",
+      "taskId": 1,
+      "weekId": 5,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450973995,
+      "timestamp": "2025-08-17T17:16:13.995Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W5",
+      "taskId": 1,
+      "weekId": 4,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450973995,
+      "timestamp": "2025-08-17T17:16:13.995Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W4",
+      "taskId": 1,
+      "weekId": 3,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450973995,
+      "timestamp": "2025-08-17T17:16:13.995Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W3",
+      "taskId": 1,
+      "weekId": 2,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450973995,
+      "timestamp": "2025-08-17T17:16:13.995Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W2",
+      "taskId": 1,
+      "weekId": 1,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
+    {
+      "id": 1755450972715,
+      "timestamp": "2025-08-17T17:16:12.715Z",
+      "user": "kavisht",
+      "action": "status_change",
+      "details": "Changed status of Build a roadmap of AI Components in the UI to planned for W1",
+      "taskId": 1,
+      "weekId": 0,
+      "taskName": "Build a roadmap of AI Components in the UI"
+    },
     {
       "id": 1755515067593,
       "timestamp": "2025-08-18T11:04:27.593Z",
@@ -85,7 +2484,7 @@
       "taskName": "Build a roadmap of AI Components in the UI"
     }
   ],
-  "lastUpdated": "2025-08-18T11:04:29.160Z",
+  "lastUpdated": "2025-08-20T07:16:15.921Z",
   "committedBy": "Kavish",
   "version": "1.0.0"
 }
