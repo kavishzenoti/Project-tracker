@@ -62,7 +62,7 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204
 }));
-
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(session({
   store: sessionStore,
@@ -74,9 +74,7 @@ app.use(session({
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for production cross-origin, 'lax' for development
-    path: '/',
-    domain: process.env.NODE_ENV === 'production' ? 'project-tracker-backend-rejs.onrender.com' : undefined, // Production domain
-    // Force cookie generation in production
+    path: '/', // Force cookie generation in production
     expires: process.env.NODE_ENV === 'production' ? new Date(Date.now() + 24 * 60 * 60 * 1000) : undefined
   },
   name: 'project-tracker-session'
