@@ -7,20 +7,20 @@
       "priority": "high"
     },
     {
-      "id": 18,
-      "name": "Define audit process for new designs",
-      "category": "Audit",
-      "priority": "high"
-    },
-    {
-      "id": 4,
-      "name": "Shared CN Libraries themed in the Zenoti theme",
+      "id": 2,
+      "name": "Building widgets using AI - Research and POCs",
       "category": "Design Roadmap",
       "priority": "high"
     },
     {
-      "id": 28,
-      "name": "Define a consistent pattern for step wizards",
+      "id": 3,
+      "name": "Icon set preparation for multiple modes",
+      "category": "Design Roadmap",
+      "priority": "medium"
+    },
+    {
+      "id": 4,
+      "name": "Shared CN Libraries themed in the Zenoti theme",
       "category": "Design Roadmap",
       "priority": "high"
     },
@@ -31,9 +31,9 @@
       "priority": "high"
     },
     {
-      "id": 2,
-      "name": "Building widgets using AI - Research and POCs",
-      "category": "Design Roadmap",
+      "id": 18,
+      "name": "Define audit process for new designs",
+      "category": "Audit",
       "priority": "high"
     },
     {
@@ -67,6 +67,12 @@
       "priority": "medium"
     },
     {
+      "id": 28,
+      "name": "Define a consistent pattern for step wizards",
+      "category": "Design Roadmap",
+      "priority": "high"
+    },
+    {
       "id": 25,
       "name": "Define vibrant color palette for Charts & Graphs",
       "category": "Design Roadmap",
@@ -89,12 +95,6 @@
       "name": "Add Charts & Graphs in the DS (Hi-Chart plugin integration)",
       "category": "Design Roadmap",
       "priority": "high"
-    },
-    {
-      "id": 3,
-      "name": "Icon set preparation for multiple modes",
-      "category": "Design Roadmap",
-      "priority": "medium"
     }
   ],
   "cellData": {
@@ -115,10 +115,92 @@
     },
     "1-5": {
       "status": "planned"
+    },
+    "3-0": {
+      "status": "planned"
+    },
+    "3-2": {
+      "status": "planned"
+    },
+    "3-1": {
+      "status": "planned"
+    },
+    "3-3": {
+      "status": "planned"
+    },
+    "3-4": {
+      "status": "planned"
     }
   },
-  "changeLog": [],
-  "lastUpdated": "2025-08-26T06:25:09.880Z",
+  "changeLog": [
+    {
+      "id": 1756189635914,
+      "timestamp": "2025-08-26T06:27:15.914Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W5",
+      "taskId": 3,
+      "weekId": 4,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1756189635575,
+      "timestamp": "2025-08-26T06:27:15.575Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W4",
+      "taskId": 3,
+      "weekId": 3,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1756189635170,
+      "timestamp": "2025-08-26T06:27:15.170Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W2",
+      "taskId": 3,
+      "weekId": 1,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1756189634758,
+      "timestamp": "2025-08-26T06:27:14.758Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W3",
+      "taskId": 3,
+      "weekId": 2,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1756189633433,
+      "timestamp": "2025-08-26T06:27:13.433Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "status_change",
+      "details": "Assigned Icon set preparation for multiple modes to planned for W1",
+      "taskId": 3,
+      "weekId": 0,
+      "taskName": "Icon set preparation for multiple modes"
+    },
+    {
+      "id": 1756189627268,
+      "timestamp": "2025-08-26T06:27:07.268Z",
+      "user": "Kavish",
+      "userId": 6,
+      "action": "sync",
+      "details": "User Kavish synced latest data from backend",
+      "taskId": null,
+      "weekId": null,
+      "taskName": null
+    }
+  ],
+  "lastUpdated": "2025-08-26T06:27:17.876Z",
   "committedBy": "Kavish",
   "version": "1.0.0"
 }
