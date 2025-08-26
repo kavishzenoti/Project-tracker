@@ -167,11 +167,16 @@ app.get('/api/auth/permissions', (req, res) => {
     return res.status(401).json({ error: 'Not authenticated' });
   }
   
-  const adminEmails = ['kavisht@zenoti.com'];
-  const canCommit = adminEmails.includes(req.session.user.email);
+  // All authenticated team members can commit/sync changes
+  const canCommit = true;
+  
+  // Only Kavish and Adit can reorder, assign anyone, and edit delivery dates
+  const adminEmails = ['kavisht@zenoti.com', 'aditk@zenoti.com'];
+  const isAdmin = adminEmails.includes(req.session.user.email);
   
   res.json({ 
     canCommit,
+    isAdmin,
     user: req.session.user 
   });
 });

@@ -358,7 +358,7 @@ const DesignSystemTracker = () => {
   useEffect(() => {
     if (currentUser) {
       console.log('Current user in DesignSystemTracker:', currentUser);
-      console.log('isAdmin value:', currentUser.isAdmin);
+              console.log('Can assign anyone:', canAssignAnyone());
       console.log('User email:', currentUser.email);
     }
   }, [currentUser]);
@@ -782,21 +782,21 @@ const DesignSystemTracker = () => {
     setChangeLog(prev => [logEntry, ...prev]);
   };
 
-  // Auto-assign function - respects admin privileges
+  // Auto-assign function - respects manager privileges
   const autoAssignUser = (taskId, weekId) => {
     if (!currentUser) return;
     
-    // Admin users can assign to anyone, regular users can only assign themselves
+    // Kavish and Adit can assign to anyone, other users can only assign themselves
     const cellKey = getCellKey(taskId, weekId);
     const currentData = cellData[cellKey] || {};
     
-    if (currentUser.isAdmin) {
-      // Admin users - no auto-assignment, they choose manually
+    if (canAssignAnyone()) {
+      // Kavish and Adit - no auto-assignment, they choose manually
       return;
     } else {
-      // Non-admin users are automatically assigned to cells they interact with
-    if (currentData.assignee !== currentUser.name) {
-      updateCellData(taskId, weekId, 'assignee', currentUser.name);
+      // Other users are automatically assigned to cells they interact with
+      if (currentData.assignee !== currentUser.name) {
+        updateCellData(taskId, weekId, 'assignee', currentUser.name);
       }
     }
   };
@@ -971,8 +971,8 @@ const DesignSystemTracker = () => {
           // Auto-schedule cells that aren't already scheduled
           if (!isCellScheduled(taskId, week)) {
             updateCellData(taskId, week, 'status', 'planned');
-            // Auto-assign non-admin users
-            autoAssignUser(taskId, week);
+                                // Auto-assign non-manager users
+                    autoAssignUser(taskId, week);
           }
         }
         
@@ -988,7 +988,7 @@ const DesignSystemTracker = () => {
       // Ctrl/Cmd+click: Toggle individual cell in multi-select mode
       if (!isCellScheduled(taskId, weekId)) {
         updateCellData(taskId, weekId, 'status', 'planned');
-        // Auto-assign non-admin users
+        // Auto-assign non-manager users
         autoAssignUser(taskId, weekId);
       }
       
@@ -1006,7 +1006,7 @@ const DesignSystemTracker = () => {
       // Regular click: Single selection
       if (!isCellScheduled(taskId, weekId)) {
         updateCellData(taskId, weekId, 'status', 'planned');
-        // Auto-assign non-admin users
+        // Auto-assign non-manager users
         autoAssignUser(taskId, weekId);
       }
       setSelectedCells(new Set([cellKey]));
@@ -1023,7 +1023,7 @@ const DesignSystemTracker = () => {
     if (!selectedCells.has(cellKey)) {
       if (!isCellScheduled(taskId, weekId)) {
         updateCellData(taskId, weekId, 'status', 'planned');
-        // Auto-assign non-admin users
+        // Auto-assign non-manager users
         autoAssignUser(taskId, weekId);
       }
       setSelectedCells(new Set([cellKey]));
@@ -1274,8 +1274,8 @@ const DesignSystemTracker = () => {
         <div className="text-xs font-medium text-gray-700 px-2 py-1">Assign to:</div>
         {currentUser && (
           <>
-            {currentUser.isAdmin ? (
-          // Admin users can assign to anyone
+            {canAssignAnyone() ? (
+          // Kavish and Adit can assign to anyone
           <>
             {teamMembers.map(member => (
               <button
@@ -1294,7 +1294,7 @@ const DesignSystemTracker = () => {
             </button>
           </>
         ) : (
-          // Non-admin users can only assign to themselves
+          // Other users can only assign to themselves
           <>
             <button
               className="w-full text-left px-2 py-1 text-sm hover:bg-gray-100 rounded bg-blue-50"
@@ -1344,9 +1344,28 @@ const DesignSystemTracker = () => {
     </div>
   );
 
-  // Function to update task delivery date (admin only)
+  // Permission checking functions
+  const canReorderTasks = () => {
+    if (!currentUser) return false;
+    // Only Kavish and Adit can reorder tasks
+    return ['kavisht@zenoti.com', 'aditk@zenoti.com'].includes(currentUser.email);
+  };
+
+  const canAssignAnyone = () => {
+    if (!currentUser) return false;
+    // Only Kavish and Adit can assign anyone to tasks
+    return ['kavisht@zenoti.com', 'aditk@zenoti.com'].includes(currentUser.email);
+  };
+
+  const canEditDeliveryDate = () => {
+    if (!currentUser) return false;
+    // Only Kavish and Adit can edit delivery dates
+    return ['kavisht@zenoti.com', 'aditk@zenoti.com'].includes(currentUser.email);
+  };
+
+  // Function to update task delivery date (restricted to Kavish and Adit)
   const updateTaskDeliveryDate = (taskId, deliveryDate) => {
-    if (!currentUser?.isAdmin) return;
+    if (!canEditDeliveryDate()) return;
     
     setTasks(prev => prev.map(task => {
       if (task.id !== taskId) return task;
@@ -1551,9 +1570,9 @@ const DesignSystemTracker = () => {
                   <div className="text-sm">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-gray-900">{currentUser.name}</span>
-                      {currentUser.isAdmin && (
+                      {canAssignAnyone() && (
                         <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">
-                          Admin
+                          Manager
                         </span>
                       )}
                     </div>
@@ -1680,8 +1699,8 @@ const DesignSystemTracker = () => {
                 <div className="border-t border-gray-200 pt-3 mt-3">
                   <div className="text-xs font-medium text-gray-700 mb-2">Role-Based Permissions:</div>
                   <div className="text-xs text-gray-600 space-y-1">
-                  <div>• <strong>Admin Users (@zenoti.com):</strong> Can assign anyone to any task</div>
-                    <div>• <strong>Regular Users:</strong> Automatically assigned to cells they interact with</div>
+                    <div>• <strong>Kavish & Adit:</strong> Can reorder tasks, assign anyone, edit delivery dates</div>
+                    <div>• <strong>All Team Members:</strong> Can commit/sync changes, assign themselves to tasks</div>
                     <div>• <strong>All Users:</strong> Can view change log and manage their own assignments</div>
                   </div>
                 </div>
@@ -1699,7 +1718,7 @@ const DesignSystemTracker = () => {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
                 </svg>
-                Drag to reorder tasks within the same category
+                Drag to reorder tasks within the same category (Kavish & Adit only)
               </span>
             </div>
           )}
@@ -1785,7 +1804,7 @@ const DesignSystemTracker = () => {
                           } ${
                             isDragging && draggedTask?.id !== task.id && draggedTask?.category === task.category ? 'cursor-pointer' : ''
                           }`}
-                          draggable={currentUser?.isAdmin}
+                          draggable={canReorderTasks()}
                           onDragStart={(e) => handleDragStart(e, task)}
                           onDragEnd={handleDragEnd}
                           onDragOver={(e) => handleDragOver(e, task)}
@@ -1831,7 +1850,7 @@ const DesignSystemTracker = () => {
                                     </div>
                                   ) : (
                                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                                      {currentUser?.isAdmin && (
+                                      {canReorderTasks() && (
                                         <div className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing flex-shrink-0">
                                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
@@ -1894,7 +1913,7 @@ const DesignSystemTracker = () => {
                                   
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-500">Delivery Date:</span>
-                                    {currentUser?.isAdmin ? (
+                                    {canEditDeliveryDate() ? (
                                       <input
                                         type="date"
                                         className="text-xs p-1 border rounded bg-white"
